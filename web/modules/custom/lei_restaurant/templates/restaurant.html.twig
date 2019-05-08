@@ -1,0 +1,22 @@
+{#
+/**
+ * @file restaurant.html.twig
+ * Default theme implementation to present Restaurant data.
+ *
+ * This template is used when viewing Restaurant pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_restaurant()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('restaurant') }}>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
+</div>

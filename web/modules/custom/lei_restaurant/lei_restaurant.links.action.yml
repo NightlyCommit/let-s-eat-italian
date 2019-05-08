@@ -1,0 +1,5 @@
+entity.restaurant.add_form:
+  route_name: entity.restaurant.add_form
+  title: 'Add a restaurant'
+  appears_on:
+    - entity.restaurant.collection

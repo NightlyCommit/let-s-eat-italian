@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains lei_restaurant.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function lei_restaurant_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the lei_restaurant module.
+    case 'help.page.lei_restaurant':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Handles Let&#039;s eat italian restaurant entities') . '</p>';
+      return $output;
+
+    default:
+  }
+}

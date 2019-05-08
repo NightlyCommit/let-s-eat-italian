@@ -1,0 +1,30 @@
+add restaurant entities:
+  title: 'Create new Restaurant entities'
+
+administer restaurant entities:
+  title: 'Administer Restaurant entities'
+  description: 'Allow to access the administration form to configure Restaurant entities.'
+  restrict access: true
+
+delete restaurant entities:
+  title: 'Delete Restaurant entities'
+
+edit restaurant entities:
+  title: 'Edit Restaurant entities'
+
+view published restaurant entities:
+  title: 'View published Restaurant entities'
+
+view unpublished restaurant entities:
+  title: 'View unpublished Restaurant entities'
+
+view all restaurant revisions:
+  title: 'View all Restaurant revisions'
+
+revert all restaurant revisions:
+  title: 'Revert all Restaurant revisions'
+  description: 'Role requires permission <em>view Restaurant revisions</em> and <em>edit rights</em> for restaurant entities in question or <em>administer restaurant entities</em>.'
+
+delete all restaurant revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Restaurant revisions</em> and <em>delete rights</em> for restaurant entities in question or <em>administer restaurant entities</em>.'

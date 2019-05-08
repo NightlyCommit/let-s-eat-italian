@@ -1,0 +1,27 @@
+# Restaurant routing definition
+restaurant.settings_tab:
+  route_name: restaurant.settings
+  title: 'Settings'
+  base_route: restaurant.settings
+
+entity.restaurant.canonical:
+  route_name: entity.restaurant.canonical
+  base_route: entity.restaurant.canonical
+  title: 'View'
+
+entity.restaurant.edit_form:
+  route_name: entity.restaurant.edit_form
+  base_route: entity.restaurant.canonical
+  title: 'Edit'
+
+entity.restaurant.version_history:
+  route_name: entity.restaurant.version_history
+  base_route: entity.restaurant.canonical
+  title: 'Revisions'
+
+entity.restaurant.delete_form:
+  route_name:  entity.restaurant.delete_form
+  base_route:  entity.restaurant.canonical
+  title: Delete
+  weight: 10
+

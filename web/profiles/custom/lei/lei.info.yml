@@ -1,0 +1,14 @@
+name: lei
+type: profile
+description: 'Let''s eat italian profile'
+core: 8.x
+install:
+  - node
+  - block
+  - toolbar
+  - field_ui
+  - menu_ui
+  - taxonomy
+  - lei_core
+themes:
+  - adminimal_theme

@@ -1,0 +1,9 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text eol=lf
+
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.mp4 binary
+*.png binary

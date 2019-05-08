@@ -1,0 +1,80 @@
+{
+    "name": "let-s-eat-italian/website",
+    "description": "Let's eat italian website project",
+    "type": "project",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "",
+            "role": ""
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "cweagans/composer-patches": "^1.6",
+        "drupal-composer/drupal-scaffold": "^2.2",
+        "drupal/adminimal_theme": "^1.4",
+        "drupal/console": "^1.0.1",
+        "drupal/core": "~8.7.0",
+        "drush/drush": "~9.0"
+    },
+    "require-dev": {
+        "composer/installers": "^1.2"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "process-timeout": 0
+    },
+    "scripts": {
+        "test:unit": "./vendor/bin/phpunit --testsuite=unit --color=always",
+        "cr": "vendor/bin/drupal cache:rebuild --ansi",
+        "site:install": "composer install --ansi && composer drupal:scaffold && vendor/bin/drupal site:install lei --account-name=administrator --account-pass=admin --force --no-interaction --ansi",
+        "cex": "vendor/bin/drupal config:export  --remove-uuid --remove-config-hash --ansi",
+        "cim": "vendor/bin/drupal config:import --ansi"
+    },
+    "extra": {
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/contrib/{$name}": [
+                "type:drupal-drush"
+            ]
+        },
+        "drupal-scaffold": {
+            "includes": [
+                ".htaccess",
+                "index.php",
+                "update.php",
+                "robots.txt",
+                "web.config",
+                "sites/default/default.services.yml",
+                "sites/default/default.settings.php"
+            ],
+            "omit-defaults": true
+        }
+    }
+}

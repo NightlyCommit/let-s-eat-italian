@@ -1,0 +1,9 @@
+#restaurant.admin.structure.settings:
+#  title: 'Restaurant'
+#  description: 'Create and manage fields, forms, and display settings for your restaurants.'
+#  route_name: restaurant.settings
+#  parent: system.admin_structure
+
+lei_core.entity_menu_links:
+  deriver: 'Drupal\lei_core\Plugin\Derivative\EntityMenuLinks'
+  weight: 100

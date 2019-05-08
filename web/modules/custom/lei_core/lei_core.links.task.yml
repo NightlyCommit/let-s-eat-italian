@@ -1,0 +1,3 @@
+lei_core.entity_local_tasks:
+  deriver: 'Drupal\lei_core\Plugin\Derivative\EntityLocalTasks'
+  weight: 100
