@@ -18,4 +18,9 @@ class ReviewController extends EntityControllerBase
   {
     return 'review';
   }
+
+  public function revisionOverview(\Drupal\lei_core\EntityInterface $review)
+  {
+    return parent::revisionOverview($review);
+  }
 }

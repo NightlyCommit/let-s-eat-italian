@@ -5,16 +5,11 @@ namespace Drupal\lei_core;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\lei_core\Entity\ReviewInterface;
-use Drupal\lei_core\ReviewStorageInterface;
 
 /**
- * Defines the storage handler class for Review entities.
+ * Defines the storage handler class for entities.
  *
- * This extends the base storage class, adding required special handling for
- * Review entities.
- *
- * @ingroup lei_review
+ * @ingroup lei_core
  */
 abstract class EntityStorageBase extends SqlContentEntityStorage implements EntityStorageInterface
 {
@@ -24,10 +19,8 @@ abstract class EntityStorageBase extends SqlContentEntityStorage implements Enti
    */
   public function revisionIds(EntityInterface $entity)
   {
-    dump($this->tableMapping); exit;
-
     return $this->database->query(
-      'SELECT vid FROM {review_revision} WHERE id=:id ORDER BY vid',
+      'SELECT vid FROM {' . $this->getEntityType()->getRevisionTable() . '} WHERE id=:id ORDER BY vid',
       [':id' => $entity->id()]
     )->fetchCol();
   }
@@ -38,7 +31,7 @@ abstract class EntityStorageBase extends SqlContentEntityStorage implements Enti
   public function userRevisionIds(AccountInterface $account)
   {
     return $this->database->query(
-      'SELECT vid FROM {review_field_revision} WHERE uid = :uid ORDER BY vid',
+      'SELECT vid FROM {' . $this->getEntityType()->getRevisionDataTable() . '} WHERE uid = :uid ORDER BY vid',
       [':uid' => $account->id()]
     )->fetchCol();
   }
@@ -48,7 +41,7 @@ abstract class EntityStorageBase extends SqlContentEntityStorage implements Enti
    */
   public function countDefaultLanguageRevisions(EntityInterface $entity)
   {
-    return $this->database->query('SELECT COUNT(*) FROM {' . $entity->getEntityType()->getRevisionTable() . '} WHERE id = :id AND default_langcode = 1', [':id' => $entity->id()])
+    return $this->database->query('SELECT COUNT(*) FROM {' . $this->getEntityType()->getRevisionTable() . '} WHERE id = :id AND default_langcode = 1', [':id' => $entity->id()])
       ->fetchField();
   }
 
@@ -57,10 +50,9 @@ abstract class EntityStorageBase extends SqlContentEntityStorage implements Enti
    */
   public function clearRevisionsLanguage(LanguageInterface $language)
   {
-    return $this->database->update('review_revision')
+    return $this->database->update($this->getEntityType()->getRevisionTable())
       ->fields(['langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED])
       ->condition('langcode', $language->getId())
       ->execute();
   }
-
 }

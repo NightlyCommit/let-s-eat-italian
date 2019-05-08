@@ -2,68 +2,39 @@
 
 namespace Drupal\lei_core\Plugin\Derivative;
 
-use Drupal\Component\Plugin\Derivative\DeriverBase;
-use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\lei_core\Entity\LEIEntityTypeInterface;
 
-class EntityMenuLinks extends DeriverBase implements ContainerDeriverInterface
+class EntityMenuLinks extends DeriverBase
 {
-  /**
-   * @var EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * EntityLocalTasks constructor.
-   * @param EntityTypeManagerInterface $entity_type_manager
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager)
-  {
-    $this->entityTypeManager = $entity_type_manager;
-  }
-
-  public static function create(ContainerInterface $container, $base_plugin_id)
-  {
-    return new static(
-      $container->get('entity_type.manager')
-    );
-  }
-
-  protected function getAllowedProviders() {
-    return [
-      'lei_core'
-    ];
-  }
 
   /**
    * {@inheritdoc}
    */
+  public function getDerivatives(LEIEntityTypeInterface $entityType, array $base_plugin_definition)
+  {
+    $derivatives = [];
+
+    $key = $entityType->id() . '.admin.structure.settings';
+
+    $derivatives[$key] = $base_plugin_definition;
+    $derivatives[$key]['title'] = $entityType->getPluralLabel();
+    $derivatives[$key]['parent'] = 'system.admin_structure';
+    $derivatives[$key]['route_name'] = $entityType->id() . '.settings';
+    $derivatives[$key]['description'] = t('Create and manage fields, forms, and display settings for your @label.', [
+      '@label' => strtolower($entityType->getPluralLabel())
+    ]);
+
+    return $derivatives;
+  }
+
   public function getDerivativeDefinitions($base_plugin_definition)
   {
-    $this->derivatives = [];
+    $definitions = parent::getDerivativeDefinitions($base_plugin_definition);
 
-    $entityTypes = $this->entityTypeManager->getDefinitions();
-
-    foreach ($entityTypes as $entityTypeId => $entityType) {
-      if ($entityType instanceof ContentEntityTypeInterface) {
-        if (array_search($entityType->getProvider(), $this->getAllowedProviders()) !== false) {
-          $key = $entityTypeId . '.admin.structure.settings';
-
-          $this->derivatives[$key] = $base_plugin_definition;
-          $this->derivatives[$key]['title'] = $entityType->getPluralLabel();
-          $this->derivatives[$key]['base_route'] = ' system.admin_structure';
-          $this->derivatives[$key]['route_name'] = $entityTypeId . '.settings';
-          $this->derivatives[$key]['description'] = t('Create and manage fields, forms, and display settings for your ' . strtolower($entityType->getPluralLabel()) . '.');
-        }
-      }
-    }
-
-    uasort($this->derivatives, function($a, $b) {
+    uasort($definitions, function ($a, $b) {
       return ($a['title'] < $b['title']) ? -1 : 1;
     });
 
-    return $this->derivatives;
+    return $definitions;
   }
 }

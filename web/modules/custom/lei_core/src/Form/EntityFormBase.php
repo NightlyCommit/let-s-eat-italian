@@ -17,7 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup lei_core
  */
-abstract class EntityFormBase extends ContentEntityForm {
+abstract class EntityFormBase extends ContentEntityForm
+{
 
   /**
    * The Current User object.
@@ -47,7 +48,8 @@ abstract class EntityFormBase extends ContentEntityForm {
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, AccountInterface $current_user = NULL, DateFormatterInterface $date_formatter = NULL) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, AccountInterface $current_user = NULL, DateFormatterInterface $date_formatter = NULL)
+  {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);
     $this->currentUser = $current_user;
     $this->dateFormatter = $date_formatter;
@@ -56,7 +58,8 @@ abstract class EntityFormBase extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container)
+  {
     return new static(
       $container->get('entity.repository'),
       $container->get('entity_type.bundle.info'),
@@ -69,7 +72,8 @@ abstract class EntityFormBase extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
-  public function form(array $form, FormStateInterface $form_state) {
+  public function form(array $form, FormStateInterface $form_state)
+  {
     /** @var RestaurantInterface $entity */
     $entity = $this->entity;
 
@@ -140,8 +144,8 @@ abstract class EntityFormBase extends ContentEntityForm {
       '#optional' => TRUE,
     ];
 
-    if (isset($form['user_id'])) {
-      $form['user_id']['#group'] = 'author';
+    if (isset($form['uid'])) {
+      $form['uid']['#group'] = 'author';
     }
 
     if (isset($form['created'])) {
@@ -156,18 +160,18 @@ abstract class EntityFormBase extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state) {
+  public function save(array $form, FormStateInterface $form_state)
+  {
     $entity = $this->entity;
 
     // Save as a new revision if requested to do so.
-    if (!$form_state->isValueEmpty('new_revision') && $form_state->getValue('new_revision') != FALSE) {
+    if (!$form_state->isValueEmpty('revision') && $form_state->getValue('revision') != FALSE) {
       $entity->setNewRevision();
 
       // If a new revision is created, save the current user as revision author.
-      $entity->setRevisionCreationTime(REQUEST_TIME);
+      $entity->setRevisionCreationTime(\Drupal::time()->getRequestTime());
       $entity->setRevisionUserId(\Drupal::currentUser()->id());
-    }
-    else {
+    } else {
       $entity->setNewRevision(FALSE);
     }
 
@@ -188,6 +192,9 @@ abstract class EntityFormBase extends ContentEntityForm {
           '@type' => $entityTypeLabel
         ]));
     }
-    $form_state->setRedirect('entity.' . $this->getEntity()->getEntityTypeId() . '.canonical', ['restaurant' => $entity->id()]);
+
+    $form_state->setRedirect('entity.' . $this->getEntity()->getEntityTypeId() . '.canonical', [
+      $this->getEntity()->getEntityTypeId() => $entity->id()
+    ]);
   }
 }

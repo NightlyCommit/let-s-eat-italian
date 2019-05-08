@@ -1,18 +1,18 @@
 <?php
 
-namespace Drupal\lei_core;
+namespace Drupal\lei_restaurant;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
 use Symfony\Component\Routing\Route;
 
 /**
- * Provides routes for entities.
+ * Provides routes for Foo entities.
  *
  * @see \Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
  * @see \Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
  */
-abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
+class FooHtmlRouteProvider extends AdminHtmlRouteProvider {
 
   /**
    * {@inheritdoc}
@@ -64,9 +64,9 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route
         ->setDefaults([
           '_title' => "{$entity_type->getLabel()} revisions",
-          '_controller' => '\Drupal\lei_core\Controller\\' . ucfirst($entity_type->id()) . 'Controller::revisionOverview',
+          '_controller' => '\Drupal\lei_restaurant\Controller\FooController::revisionOverview',
         ])
-        ->setRequirement('_permission', 'access review revisions')
+        ->setRequirement('_permission', 'access foo revisions')
         ->setOption('_admin_route', TRUE);
 
       return $route;
@@ -87,10 +87,10 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('revision'));
       $route
         ->setDefaults([
-          '_controller' => '\Drupal\lei_core\Controller\ReviewController::revisionShow',
-          '_title_callback' => '\Drupal\lei_core\Controller\ReviewController::revisionPageTitle',
+          '_controller' => '\Drupal\lei_restaurant\Controller\FooController::revisionShow',
+          '_title_callback' => '\Drupal\lei_restaurant\Controller\FooController::revisionPageTitle',
         ])
-        ->setRequirement('_permission', 'access review revisions')
+        ->setRequirement('_permission', 'access foo revisions')
         ->setOption('_admin_route', TRUE);
 
       return $route;
@@ -111,10 +111,10 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('revision_revert'));
       $route
         ->setDefaults([
-          '_form' => '\Drupal\lei_core\Form\ReviewRevisionRevertForm',
+          '_form' => '\Drupal\lei_restaurant\Form\FooRevisionRevertForm',
           '_title' => 'Revert to earlier revision',
         ])
-        ->setRequirement('_permission', 'revert all review revisions')
+        ->setRequirement('_permission', 'revert all foo revisions')
         ->setOption('_admin_route', TRUE);
 
       return $route;
@@ -135,10 +135,10 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('revision_delete'));
       $route
         ->setDefaults([
-          '_form' => '\Drupal\lei_core\Form\ReviewRevisionDeleteForm',
+          '_form' => '\Drupal\lei_restaurant\Form\FooRevisionDeleteForm',
           '_title' => 'Delete earlier revision',
         ])
-        ->setRequirement('_permission', 'delete all review revisions')
+        ->setRequirement('_permission', 'delete all foo revisions')
         ->setOption('_admin_route', TRUE);
 
       return $route;
@@ -159,10 +159,10 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route = new Route($entity_type->getLinkTemplate('translation_revert'));
       $route
         ->setDefaults([
-          '_form' => '\Drupal\lei_core\Form\ReviewRevisionRevertTranslationForm',
+          '_form' => '\Drupal\lei_restaurant\Form\FooRevisionRevertTranslationForm',
           '_title' => 'Revert to earlier revision of a translation',
         ])
-        ->setRequirement('_permission', 'revert all review revisions')
+        ->setRequirement('_permission', 'revert all foo revisions')
         ->setOption('_admin_route', TRUE);
 
       return $route;
@@ -183,7 +183,7 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       $route = new Route("/admin/structure/{$entity_type->id()}/settings");
       $route
         ->setDefaults([
-          '_form' => 'Drupal\lei_core\Form\ReviewSettingsForm',
+          '_form' => 'Drupal\lei_restaurant\Form\FooSettingsForm',
           '_title' => "{$entity_type->getLabel()} settings",
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())
@@ -192,4 +192,5 @@ abstract class EntityHtmlRouteProviderBase extends AdminHtmlRouteProvider {
       return $route;
     }
   }
+
 }

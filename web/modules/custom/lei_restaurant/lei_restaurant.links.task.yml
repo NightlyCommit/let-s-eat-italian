@@ -1,27 +1,27 @@
-# Restaurant routing definition
-restaurant.settings_tab:
-  route_name: restaurant.settings
+# Foo routing definition
+foo.settings_tab:
+  route_name: foo.settings
   title: 'Settings'
-  base_route: restaurant.settings
+  base_route: foo.settings
 
-entity.restaurant.canonical:
-  route_name: entity.restaurant.canonical
-  base_route: entity.restaurant.canonical
+entity.foo.canonical:
+  route_name: entity.foo.canonical
+  base_route: entity.foo.canonical
   title: 'View'
 
-entity.restaurant.edit_form:
-  route_name: entity.restaurant.edit_form
-  base_route: entity.restaurant.canonical
+entity.foo.edit_form:
+  route_name: entity.foo.edit_form
+  base_route: entity.foo.canonical
   title: 'Edit'
 
-entity.restaurant.version_history:
-  route_name: entity.restaurant.version_history
-  base_route: entity.restaurant.canonical
+entity.foo.version_history:
+  route_name: entity.foo.version_history
+  base_route: entity.foo.canonical
   title: 'Revisions'
 
-entity.restaurant.delete_form:
-  route_name:  entity.restaurant.delete_form
-  base_route:  entity.restaurant.canonical
+entity.foo.delete_form:
+  route_name:  entity.foo.delete_form
+  base_route:  entity.foo.canonical
   title: Delete
   weight: 10
 

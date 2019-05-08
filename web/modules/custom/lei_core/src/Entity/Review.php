@@ -13,7 +13,7 @@ use Drupal\lei_core\EntityBase;
  *
  * @ingroup lei_core
  *
- * @ContentEntityType(
+ * @LEIEntityType(
  *   id = "review",
  *   label = @Translation("Review"),
  *   label_plural = @Translation("Reviews"),
@@ -47,9 +47,10 @@ use Drupal\lei_core\EntityBase;
  *     "revision" = "vid",
  *     "label" = "name",
  *     "uuid" = "uuid",
- *     "uid" = "user_id",
+ *     "owner" = "uid",
  *     "langcode" = "langcode",
  *     "status" = "status",
+ *     "published" = "status"
  *   },
  *   links = {
  *     "canonical" = "/review/{review}",

@@ -2,75 +2,50 @@
 
 namespace Drupal\lei_core\Plugin\Derivative;
 
-use Drupal\Component\Plugin\Derivative\DeriverBase;
-use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\lei_core\Entity\LEIEntityTypeInterface;
 
-class EntityLocalTasks extends DeriverBase implements ContainerDeriverInterface
+class EntityLocalTasks extends DeriverBase
 {
-  /**
-   * @var EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * EntityLocalTasks constructor.
-   * @param EntityTypeManagerInterface $entity_type_manager
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager)
-  {
-    $this->entityTypeManager = $entity_type_manager;
-  }
-
-  public static function create(ContainerInterface $container, $base_plugin_id)
-  {
-    return new static(
-      $container->get('entity_type.manager')
-    );
-  }
-
-  protected function getAllowedProviders() {
-    return [
-      'lei_core',
-      'lei_restaurant'
-    ];
-  }
-
   /**
    * {@inheritdoc}
    */
-  public function getDerivativeDefinitions($base_plugin_definition)
+  public function getDerivatives(LEIEntityTypeInterface $entityType, array $base_plugin_definition)
   {
-    $this->derivatives = [];
+    $derivatives = [];
+    $entityTypeId = $entityType->id();
 
-    $entityTypes = $this->entityTypeManager->getDefinitions();
+    // canonical
+    $key = 'entity.' . $entityTypeId . '.canonical';
 
-    foreach ($entityTypes as $entityTypeId => $entityType) {
-      if ($entityType instanceof ContentEntityTypeInterface) {
-        if (array_search($entityType->getProvider(), $this->getAllowedProviders()) !== false) {
-          $key = $entityTypeId . 'settings_tab';
+    $derivatives[$key] = $base_plugin_definition;
+    $derivatives[$key]['title'] = t('View');
+    $derivatives[$key]['route_name'] = 'entity.' . $entityTypeId . '.canonical';
+    $derivatives[$key]['base_route'] = 'entity.' . $entityTypeId . '.canonical';
 
-          $this->derivatives[$key] = $base_plugin_definition;
-          $this->derivatives[$key]['title'] = $entityType->getPluralLabel();
-          $this->derivatives[$key]['base_route'] = $entityTypeId . '.settings';
-          $this->derivatives[$key]['route_name'] = $entityTypeId . '.settings';
+    // edit form
+    $key = 'entity.' . $entityTypeId . '.edit_form';
 
-          $key = $entityTypeId . 'collection_tab';
+    $derivatives[$key] = $base_plugin_definition;
+    $derivatives[$key]['title'] = t('Edit');
+    $derivatives[$key]['route_name'] = 'entity.' . $entityTypeId . '.edit_form';
+    $derivatives[$key]['base_route'] = 'entity.' . $entityTypeId . '.canonical';
 
-          $this->derivatives[$key] = $base_plugin_definition;
-          $this->derivatives[$key]['title'] = $entityType->getPluralLabel();
-          $this->derivatives[$key]['base_route'] = 'system.admin_content';
-          $this->derivatives[$key]['route_name'] = 'entity.' . $entityTypeId . '.collection';
-        }
-      }
-    }
+    // revisions tab
+    $key = 'entity.' . $entityTypeId . '.revisions_tab';
 
-    uasort($this->derivatives, function($a, $b) {
-      return ($a['title'] < $b['title']) ? -1 : 1;
-    });
+    $derivatives[$key] = $base_plugin_definition;
+    $derivatives[$key]['title'] = t('Revisions');
+    $derivatives[$key]['base_route'] = 'entity.' . $entityTypeId . '.canonical';
+    $derivatives[$key]['route_name'] = 'entity.' . $entityTypeId . '.version_history';
 
-    return $this->derivatives;
+    // delete tab
+    $key = 'entity.' . $entityTypeId . '.delete_form';
+
+    $derivatives[$key] = $base_plugin_definition;
+    $derivatives[$key]['title'] = t('Delete');
+    $derivatives[$key]['base_route'] = 'entity.' . $entityTypeId . '.canonical';
+    $derivatives[$key]['route_name'] = 'entity.' . $entityTypeId . '.delete_form';
+
+    return $derivatives;
   }
 }

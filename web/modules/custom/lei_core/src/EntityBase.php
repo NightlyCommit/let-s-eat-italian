@@ -4,15 +4,15 @@
 namespace Drupal\lei_core;
 
 
+use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\EntityOwnerTrait;
 
-abstract class EntityBase extends RevisionableContentEntityBase implements EntityInterface
+abstract class EntityBase extends EditorialContentEntityBase implements EntityInterface
 {
   use EntityChangedTrait;
   use EntityOwnerTrait;
@@ -73,33 +73,31 @@ abstract class EntityBase extends RevisionableContentEntityBase implements Entit
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type)
   {
     $fields = parent::baseFieldDefinitions($entity_type);
+    $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
+    $fields['uid']
       ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the restaurant entity.'))
+      ->setDescription(t('The username of the entity author.'))
       ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
-      ->setTranslatable(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'author',
+        'weight' => 0,
       ])
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
         'settings' => [
           'match_operator' => 'CONTAINS',
           'size' => '60',
-          'autocomplete_type' => 'tags',
           'placeholder' => '',
         ],
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Published'))
-      ->setDescription(t('A boolean indicating whether the restaurant is published.'))
+      ->setDescription(t('A boolean indicating whether the entity is published.'))
       ->setRevisionable(TRUE)
       ->setDefaultValue(TRUE)
       ->setDisplayOptions('form', [
@@ -138,21 +136,5 @@ abstract class EntityBase extends RevisionableContentEntityBase implements Entit
   public function setCreatedTime($timestamp)
   {
     $this->set('created', $timestamp);
-  }
-
-  /**
-   * @return bool
-   */
-  public function isPublished()
-  {
-    return (bool)$this->getEntityKey('status');
-  }
-
-  /**
-   * @param bool $published
-   */
-  public function setPublished($published)
-  {
-    $this->set('status', $published ? TRUE : FALSE);
   }
 }

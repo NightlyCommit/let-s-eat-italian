@@ -2,3 +2,9 @@ services:
   lei_core.theme_handler:
     class: Drupal\lei_core\ThemeHandler
     arguments: ['@app.root', '@config.factory', '@extension.list.theme']
+  entity_type.manager:
+    class: Drupal\lei_core\Entity\EntityTypeManager
+    arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@string_translation', '@class_resolver', '@entity.last_installed_schema.repository']
+    parent: container.trait
+    tags:
+      - { name: plugin_manager_cache_clear }

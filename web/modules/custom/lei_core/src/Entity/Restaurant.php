@@ -5,14 +5,14 @@ namespace Drupal\lei_core\Entity;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\lei_core\EntityBase;
-use Drupal\lei_restaurant\RatingItemList;
+use Drupal\lei_core\Field\RatingItemList;
 
 /**
  * Defines the Restaurant entity.
  *
  * @ingroup lei_core
  *
- * @ContentEntityType(
+ * @LEIEntityType(
  *   id = "restaurant",
  *   label = @Translation("Restaurant"),
  *   label_plural = @Translation("Restaurants"),
@@ -46,9 +46,10 @@ use Drupal\lei_restaurant\RatingItemList;
  *     "revision" = "vid",
  *     "label" = "name",
  *     "uuid" = "uuid",
- *     "uid" = "user_id",
+ *     "owner" = "uid",
  *     "langcode" = "langcode",
  *     "status" = "status",
+ *     "published" = "status"
  *   },
  *   links = {
  *     "canonical" = "/restaurant/{restaurant}",
@@ -56,10 +57,10 @@ use Drupal\lei_restaurant\RatingItemList;
  *     "edit-form" = "/restaurant/{restaurant}/edit",
  *     "delete-form" = "/restaurant/{restaurant}/delete",
  *     "version-history" = "/restaurant/{restaurant}/revisions",
- *     "revision" = "/restaurant/{restaurant}/revisions/{revision}/view",
- *     "revision_revert" = "/admin/content/restaurant/{restaurant}/revisions/{revision}/revert",
- *     "revision_delete" = "/admin/content/restaurant/{restaurant}/revisions/{revision}/delete",
- *     "translation_revert" = "/admin/content/restaurant/{restaurant}/revisions/{revision}/revert/{langcode}",
+ *     "revision" = "/restaurant/{restaurant}/revisions/{restaurant_revision}/view",
+ *     "revision_revert" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/revert",
+ *     "revision_delete" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/delete",
+ *     "translation_revert" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/revert/{langcode}",
  *     "collection" = "/admin/content/restaurant",
  *   },
  *   field_ui_base_route = "restaurant.settings"
@@ -77,7 +78,7 @@ class Restaurant extends EntityBase implements RestaurantInterface
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
-      ->setDescription(t('The name of the restaurant entity.'))
+      ->setDescription(t('The name of the restaurant.'))
       ->setRevisionable(TRUE)
       ->setSettings([
         'max_length' => 50,

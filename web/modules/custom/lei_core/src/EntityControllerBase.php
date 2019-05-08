@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\lei_core\EntityInterface;
 use Drupal\lei_core\EntityStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class EntityControllerBase.
  *
- *  Returns responses for entity routes.
+ * Returns responses for entity routes.
  */
 abstract class EntityControllerBase extends ControllerBase implements ContainerInjectionInterface
 {
@@ -32,7 +33,8 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
     $this->dateFormatter = $date_formatter;
   }
 
-  static function create(ContainerInterface $container) {
+  static function create(ContainerInterface $container)
+  {
     return new static(
       $container->get('date.formatter')
     );
@@ -42,6 +44,15 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
    * @return int
    */
   abstract protected function getEntityTypeId();
+
+  /**
+   * @return Drupal\Core\Entity\EntityTypeInterface|null
+   * @throws Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getEntityType()
+  {
+    return $this->entityTypeManager()->getDefinition($this->getEntityTypeId());
+  }
 
   /**
    * Displays a revision.
@@ -84,8 +95,12 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
     $langname = $entity->language()->getName();
     $languages = $entity->getTranslationLanguages();
     $has_translations = (count($languages) > 1);
+
+    $entityType = $this->getEntityType();
+    $entityTypeId = $this->getEntityTypeId();
+
     /** @var EntityStorageInterface $entity_storage */
-    $entity_storage = $this->entityTypeManager()->getStorage($this->getEntityTypeId());
+    $entity_storage = $this->entityTypeManager()->getStorage($entityTypeId);
 
     $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', ['@langname' => $langname, '%title' => $entity->label()]) : $this->t('Revisions for %title', ['%title' => $entity->label()]);
     $header = [$this->t('Revision'), $this->t('Operations')];
@@ -102,8 +117,8 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
     foreach (array_reverse($vids) as $vid) {
       /** @var EntityInterface $revision */
       $revision = $entity_storage->loadRevision($vid);
-      // Only show revisions that are affected by the language that is being
-      // displayed.
+
+      // Only show revisions that are affected by the language that is being displayed.
       if ($revision->hasTranslation($langcode) && $revision->getTranslation($langcode)->isRevisionTranslationAffected()) {
         $username = [
           '#theme' => 'username',
@@ -112,10 +127,14 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
 
         // Use revision link to link to revisions that are not active.
         $date = Drupal::service('date.formatter')->format($revision->getRevisionCreationTime(), 'short');
+
         if ($vid != $entity->getRevisionId()) {
-          $link = new Link($date, $revision->toUrl());
+          $link = $this->getLinkGenerator()->generate($date, new Url('entity.' . $entityTypeId . '.revision', [
+            $entityTypeId => $entity->id(),
+            $entityTypeId . '_revision' => $vid
+          ]));
         } else {
-          $link = $entity->toLink($date);
+          $link = $entity->toLink($date)->toString();
         }
 
         $row = [];
@@ -130,6 +149,7 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
             ],
           ],
         ];
+
         $row[] = $column;
 
         if ($latest_revision) {
@@ -140,12 +160,15 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
               '#suffix' => '</em>',
             ],
           ];
+
           foreach ($row as &$current) {
             $current['class'] = ['revision-current'];
           }
+
           $latest_revision = FALSE;
         } else {
           $links = [];
+
           if ($revert_permission) {
             $links['revert'] = [
               'title' => $this->t('Revert'),
@@ -181,5 +204,4 @@ abstract class EntityControllerBase extends ControllerBase implements ContainerI
 
     return $build;
   }
-
 }

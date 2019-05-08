@@ -3,3 +3,8 @@ entity.restaurant.add_form:
   title: 'Add a restaurant'
   appears_on:
     - entity.restaurant.collection
+entity.foo.add_form:
+  route_name: entity.foo.add_form
+  title: 'Add Foo'
+  appears_on:
+    - entity.foo.collection

@@ -28,3 +28,33 @@ revert all restaurant revisions:
 delete all restaurant revisions:
   title: 'Delete all revisions'
   description: 'Role requires permission to <em>view Restaurant revisions</em> and <em>delete rights</em> for restaurant entities in question or <em>administer restaurant entities</em>.'
+add foo entities:
+  title: 'Create new Foo entities'
+
+administer foo entities:
+  title: 'Administer Foo entities'
+  description: 'Allow to access the administration form to configure Foo entities.'
+  restrict access: true
+
+delete foo entities:
+  title: 'Delete Foo entities'
+
+edit foo entities:
+  title: 'Edit Foo entities'
+
+view published foo entities:
+  title: 'View published Foo entities'
+
+view unpublished foo entities:
+  title: 'View unpublished Foo entities'
+
+view all foo revisions:
+  title: 'View all Foo revisions'
+
+revert all foo revisions:
+  title: 'Revert all Foo revisions'
+  description: 'Role requires permission <em>view Foo revisions</em> and <em>edit rights</em> for foo entities in question or <em>administer foo entities</em>.'
+
+delete all foo revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Foo revisions</em> and <em>delete rights</em> for foo entities in question or <em>administer foo entities</em>.'
