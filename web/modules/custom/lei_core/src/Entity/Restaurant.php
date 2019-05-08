@@ -12,7 +12,7 @@ use Drupal\lei_restaurant\RatingItemList;
  *
  * @ingroup lei_core
  *
- * @LEIEntityType(
+ * @ContentEntityType(
  *   id = "restaurant",
  *   label = @Translation("Restaurant"),
  *   label_plural = @Translation("Restaurants"),
