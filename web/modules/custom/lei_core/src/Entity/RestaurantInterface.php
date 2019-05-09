@@ -2,7 +2,7 @@
 
 namespace Drupal\lei_core\Entity;
 
-use Drupal\lei_core\EntityInterface;
+use Drupal\lei_entity\EntityInterface;
 
 /**
  * Provides an interface for defining Restaurant entities.

@@ -2,14 +2,15 @@
 
 namespace Drupal\lei_core\Controller;
 
-use Drupal\lei_core\EntityControllerBase;
+use Drupal\lei_entity\Controller\EntityController;
+use Drupal\lei_entity\EntityInterface;
 
 /**
  * Class ReviewController.
  *
  * Returns responses for Review routes.
  */
-class ReviewController extends EntityControllerBase
+class ReviewController extends EntityController
 {
   /**
    * @return int
@@ -19,8 +20,13 @@ class ReviewController extends EntityControllerBase
     return 'review';
   }
 
-  public function revisionOverview(\Drupal\lei_core\EntityInterface $review)
+  public function revisionOverview(EntityInterface $review)
   {
     return parent::revisionOverview($review);
+  }
+
+  public function revisionShow($review_revision)
+  {
+    return parent::revisionShow($review_revision);
   }
 }

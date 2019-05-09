@@ -2,6 +2,8 @@
 
 namespace Drupal\lei_core;
 
+use Drupal\lei_entity\EntityStorageInterface;
+
 /**
  * Defines the storage handler class for Review entities.
  *

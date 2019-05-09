@@ -1,5 +1,0 @@
-name: 'lei_restaurant'
-type: module
-description: 'Handles "Let''s eat italian" Restaurant entity'
-core: 8.x
-package: 'LEI'

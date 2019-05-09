@@ -1,0 +1,11 @@
+lei_entity.entity_local_tasks:
+  deriver: 'Drupal\lei_entity\Plugin\Derivative\EntityLocalTasks'
+  weight: 0
+
+lei_entity.entity_settings_tab:
+  deriver: 'Drupal\lei_entity\Plugin\Derivative\EntitySettingsTab'
+  weight: 0
+
+lei_entity.entity_collection_tab:
+  deriver: 'Drupal\lei_entity\Plugin\Derivative\EntityCollectionTab'
+  weight: 0

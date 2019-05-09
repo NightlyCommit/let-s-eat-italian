@@ -1,3 +1,0 @@
-lei_core.entity_local_actions:
-  deriver: 'Drupal\lei_core\Plugin\Derivative\EntityLocalActions'
-  weight: 100

@@ -2,12 +2,14 @@
 
 namespace Drupal\lei_core;
 
+use Drupal\lei_entity\EntityHtmlRouteProvider;
+
 /**
  * Provides routes for Restaurant entities.
  *
  * @see \Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
  * @see \Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
  */
-class RestaurantHtmlRouteProvider extends EntityHtmlRouteProviderBase {
+class RestaurantHtmlRouteProvider extends EntityHtmlRouteProvider {
 
 }

@@ -4,8 +4,8 @@ namespace Drupal\lei_core\Entity;
 
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\lei_core\EntityBase;
 use Drupal\lei_core\Field\RatingItemList;
+use Drupal\lei_entity\EntityBase;
 
 /**
  * Defines the Restaurant entity.
@@ -16,54 +16,6 @@ use Drupal\lei_core\Field\RatingItemList;
  *   id = "restaurant",
  *   label = @Translation("Restaurant"),
  *   label_plural = @Translation("Restaurants"),
- *   handlers = {
- *     "storage" = "Drupal\lei_core\RestaurantStorage",
- *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\lei_core\RestaurantListBuilder",
- *     "views_data" = "Drupal\lei_core\Entity\RestaurantViewsData",
- *     "translation" = "Drupal\lei_core\RestaurantTranslationHandler",
- *
- *     "form" = {
- *       "default" = "Drupal\lei_core\Form\RestaurantForm",
- *       "add" = "Drupal\lei_core\Form\RestaurantForm",
- *       "edit" = "Drupal\lei_core\Form\RestaurantForm",
- *       "delete" = "Drupal\lei_core\Form\RestaurantDeleteForm",
- *     },
- *     "access" = "Drupal\lei_core\RestaurantAccessControlHandler",
- *     "route_provider" = {
- *       "html" = "Drupal\lei_core\RestaurantHtmlRouteProvider",
- *     },
- *   },
- *   base_table = "restaurant",
- *   data_table = "restaurant_field_data",
- *   revision_table = "restaurant_revision",
- *   revision_data_table = "restaurant_field_revision",
- *   show_revision_ui = TRUE,
- *   translatable = TRUE,
- *   admin_permission = "administer restaurant entities",
- *   entity_keys = {
- *     "id" = "id",
- *     "revision" = "vid",
- *     "label" = "name",
- *     "uuid" = "uuid",
- *     "owner" = "uid",
- *     "langcode" = "langcode",
- *     "status" = "status",
- *     "published" = "status"
- *   },
- *   links = {
- *     "canonical" = "/restaurant/{restaurant}",
- *     "add-form" = "/restaurant/add",
- *     "edit-form" = "/restaurant/{restaurant}/edit",
- *     "delete-form" = "/restaurant/{restaurant}/delete",
- *     "version-history" = "/restaurant/{restaurant}/revisions",
- *     "revision" = "/restaurant/{restaurant}/revisions/{restaurant_revision}/view",
- *     "revision_revert" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/revert",
- *     "revision_delete" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/delete",
- *     "translation_revert" = "/admin/content/restaurant/{restaurant}/revisions/{restaurant_revision}/revert/{langcode}",
- *     "collection" = "/admin/content/restaurant",
- *   },
- *   field_ui_base_route = "restaurant.settings"
  * )
  */
 class Restaurant extends EntityBase implements RestaurantInterface

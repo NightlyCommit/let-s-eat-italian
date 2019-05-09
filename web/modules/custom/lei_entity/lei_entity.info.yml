@@ -1,0 +1,5 @@
+name: 'Let''s eat italian - Entity API'
+type: module
+description: 'Let''s eat italian custom Entity API'
+core: 8.x
+package: 'LEI'

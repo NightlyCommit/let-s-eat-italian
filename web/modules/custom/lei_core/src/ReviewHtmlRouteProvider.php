@@ -2,8 +2,7 @@
 
 namespace Drupal\lei_core;
 
-use Drupal\Core\Entity\EntityTypeInterface;
-use Symfony\Component\Routing\Route;
+use Drupal\lei_entity\EntityHtmlRouteProvider;
 
 /**
  * Provides routes for Review entities.
@@ -11,6 +10,6 @@ use Symfony\Component\Routing\Route;
  * @see \Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
  * @see \Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
  */
-class ReviewHtmlRouteProvider extends EntityHtmlRouteProviderBase {
+class ReviewHtmlRouteProvider extends EntityHtmlRouteProvider {
 
 }
