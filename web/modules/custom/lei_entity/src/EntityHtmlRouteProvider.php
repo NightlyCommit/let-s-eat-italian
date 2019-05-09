@@ -64,6 +64,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
    */
   protected function getHistoryRoute(EntityTypeInterface $entity_type)
   {
+
     if ($entity_type->hasLinkTemplate('version-history')) {
       $route = new Route($entity_type->getLinkTemplate('version-history'));
       $route
@@ -72,7 +73,13 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
           '_controller' => '\Drupal\lei_entity\Controller\EntityController::revisionOverview',
         ])
         ->setRequirement('_permission', 'access review revisions')
-        ->setOption('_admin_route', TRUE);
+        ->setRequirement('entity', '\d+')
+        ->setOption('_admin_route', TRUE)
+        ->setOption('parameters', [
+          'entity' => [
+            'type' => 'entity:' . $entity_type->id()
+          ],
+        ]);
 
       return $route;
     }
@@ -198,6 +205,19 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
       ])
       ->setRequirement('_permission', $entity_type->getAdminPermission())
       ->setOption('_admin_route', TRUE);
+
+    return $route;
+  }
+
+  protected function getCanonicalRoute(EntityTypeInterface $entity_type)
+  {
+    $route = parent::getCanonicalRoute($entity_type);
+
+    $route->setOption('parameters', [
+      'entity' => [
+        'type' => 'entity:' . $entity_type->id()
+      ],
+    ]);
 
     return $route;
   }

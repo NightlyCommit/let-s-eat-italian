@@ -34,13 +34,18 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
   {
     $uri_route_parameters = parent::urlRouteParameters($rel);
 
+    unset($uri_route_parameters[$this->getEntityTypeId()]);
+
     if ($rel === 'revision') {
       $uri_route_parameters[$this->getEntityTypeId()] = $this->id();
     }
 
     if ($rel === 'revision' || $rel === 'revision_revert' || $rel === 'revision_delete') {
-      unset($uri_route_parameters[$this->getEntityTypeId() . '_revision']);
       $uri_route_parameters['revision'] = $this->getRevisionId();
+    }
+
+    if ($rel === 'canonical' || $rel === 'edit-form' || $rel === 'delete-form') {
+      $uri_route_parameters['entity'] = $this->id();
     }
 
 //    dump($rel, $uri_route_parameters);

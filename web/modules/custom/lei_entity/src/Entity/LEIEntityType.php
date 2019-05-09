@@ -16,15 +16,15 @@ class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
     $id = $definition['id'];
 
     $defaultDefinition['links'] = [
-      'canonical' => "/{$id}/{{$id}}",
+      'canonical' => "/{$id}/{entity}",
       'add-form' => "/{$id}/add",
-      'edit-form' => "/{$id}/{{$id}}/edit",
-      'delete-form' => "/{$id}/{{$id}}/delete",
-      'version-history' => "/{$id}/{{$id}}/revisions",
-      'revision' => "/{$id}/{{$id}}/revisions/{revision}/view",
-      'revision_revert' => "/admin/content/{$id}/{{$id}}/revisions/{revision}/revert",
-      'revision_delete' => "/admin/content/{$id}/{{$id}}/revisions/{revision}/delete",
-      'translation_revert' => "/admin/content/{$id}/{{$id}}/revisions/{revision}/revert/{langcode}",
+      'edit-form' => "/{$id}/{entity}/edit",
+      'delete-form' => "/{$id}/{entity}/delete",
+      'version-history' => "/{$id}/{entity}/revisions",
+      'revision' => "/{$id}/{entity}/revisions/{entity_revision}/view",
+      'revision_revert' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/revert",
+      'revision_delete' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/delete",
+      'translation_revert' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/revert/{langcode}",
       'collection' => "/admin/content/{$id}",
     ];
 
@@ -37,10 +37,10 @@ class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
       'views_data' => "Drupal\lei_entity\Entity\EntityViewsData",
       'translation' => "Drupal\lei_entity\EntityTranslationHandler",
       'form' => [
-        'default' => "Drupal\lei_entity\Form\LEIEntityForm",
-        'add' => "Drupal\lei_entity\Form\LEIEntityForm",
-        'edit' => "Drupal\lei_entity\Form\LEIEntityForm",
-        'delete' => "Drupal\lei_entity\Form\LEIEntityDeleteForm",
+        'default' => "Drupal\lei_entity\Form\EntityForm",
+        'add' => "Drupal\lei_entity\Form\EntityForm",
+        'edit' => "Drupal\lei_entity\Form\EntityForm",
+        'delete' => "Drupal\lei_entity\Form\EntityDeleteForm",
       ],
       'access' => "Drupal\lei_entity\EntityAccessControlHandler",
       'route_provider' => [

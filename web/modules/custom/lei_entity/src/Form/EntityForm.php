@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\lei_entity\Entity\RestaurantInterface;
+use Drupal\lei_entity\EntityInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup lei_entity
  */
-abstract class EntityFormBase extends ContentEntityForm
+class EntityForm extends ContentEntityForm
 {
 
   /**
@@ -75,7 +75,7 @@ abstract class EntityFormBase extends ContentEntityForm
    */
   public function form(array $form, FormStateInterface $form_state)
   {
-    /** @var RestaurantInterface $entity */
+    /** @var EntityInterface $entity */
     $entity = $this->entity;
 
     if ($this->operation == 'edit') {

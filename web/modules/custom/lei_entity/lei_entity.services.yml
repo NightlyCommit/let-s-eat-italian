@@ -5,3 +5,8 @@ services:
     parent: container.trait
     tags:
       - { name: plugin_manager_cache_clear }
+  # @see https://www.drupal.org/project/drupal/issues/2991698#comment-13101114 for why we have to entirely replace access_check.entity instead of providing a supplementary access check
+  access_check.entity:
+    class: Drupal\lei_entity\Entity\EntityAccessCheck
+    tags:
+      - { name: access_check, applies_to: _entity_access }

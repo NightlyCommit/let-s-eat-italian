@@ -36,19 +36,6 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
     );
   }
 
-  protected function getEntityTypeId() {
-
-  }
-
-  /**
-   * @return Drupal\Core\Entity\EntityTypeInterface|null
-   * @throws Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function getEntityType()
-  {
-    return $this->entityTypeManager()->getDefinition($this->getEntityTypeId());
-  }
-
   /**
    * Displays a revision.
    *
@@ -57,9 +44,9 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
    */
   public function revisionShow($revision)
   {
-    /** @var EntityInterface $entity */
+    /** @var Drupal\lei_entity\EntityInterface $entity */
     $entity = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadRevision($revision);
-    $view_builder = $this->entityTypeManager()->getViewBuilder($this->getEntityTypeId());
+    $view_builder = $this->entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
 
     return $view_builder->view($entity);
   }
@@ -72,7 +59,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
    */
   public function revisionPageTitle($revision)
   {
-    /** @var EntityInterface $entity */
+    /** @var Drupal\lei_entity\EntityInterface $entity */
     $entity = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadRevision($revision);
     return $this->t('Revision of %title from %date', ['%title' => $entity->label(), '%date' => $this->dateFormatter->format($entity->getRevisionCreationTime())]);
   }
@@ -91,17 +78,16 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
     $languages = $entity->getTranslationLanguages();
     $has_translations = (count($languages) > 1);
 
-    $entityType = $this->getEntityType();
-    $entityTypeId = $this->getEntityTypeId();
+    $entityTypeId = $entity->getEntityTypeId();
 
-    /** @var EntityStorageInterface $entity_storage */
+    /** @var Drupal\lei_entity\EntityStorageInterface $entity_storage */
     $entity_storage = $this->entityTypeManager()->getStorage($entityTypeId);
 
     $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', ['@langname' => $langname, '%title' => $entity->label()]) : $this->t('Revisions for %title', ['%title' => $entity->label()]);
     $header = [$this->t('Revision'), $this->t('Operations')];
 
-    $revert_permission = (($account->hasPermission("revert all restaurant revisions") || $account->hasPermission('administer restaurant entities')));
-    $delete_permission = (($account->hasPermission("delete all restaurant revisions") || $account->hasPermission('administer restaurant entities')));
+    $revert_permission = (($account->hasPermission("revert all ' . $entityTypeId . ' revisions") || $account->hasPermission('administer ' . $entityTypeId . ' entities')));
+    $delete_permission = (($account->hasPermission("delete all ' . $entityTypeId . ' revisions") || $account->hasPermission('administer ' . $entityTypeId . ' entities')));
 
     $rows = [];
 
@@ -110,7 +96,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
     $latest_revision = TRUE;
 
     foreach (array_reverse($vids) as $vid) {
-      /** @var EntityInterface $revision */
+      /** @var Drupal\lei_entity\EntityInterface $revision */
       $revision = $entity_storage->loadRevision($vid);
 
       // Only show revisions that are affected by the language that is being displayed.
@@ -124,7 +110,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
         $date = Drupal::service('date.formatter')->format($revision->getRevisionCreationTime(), 'short');
 
         if (!$revision->isDefaultRevision()) {
-          $link = $revision->toLink($date,'revision', [
+          $link = $revision->toLink($date, 'revision', [
             'revision' => $vid
           ])->toString();
         } else {
@@ -190,7 +176,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
       }
     }
 
-    $build['restaurant_revisions_table'] = [
+    $build['entity_revisions_table'] = [
       '#theme' => 'table',
       '#rows' => $rows,
       '#header' => $header,

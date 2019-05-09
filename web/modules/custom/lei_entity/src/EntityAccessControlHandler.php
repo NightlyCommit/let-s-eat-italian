@@ -2,7 +2,6 @@
 
 namespace Drupal\lei_entity;
 
-use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -12,7 +11,7 @@ use Drupal\Core\Access\AccessResult;
  *
  * @see \Drupal\lei_entity\EntityInterface.
  */
-abstract class EntityAccessControlHandlerBase extends EntityAccessControlHandler
+class EntityAccessControlHandler extends \Drupal\Core\Entity\EntityAccessControlHandler
 {
 
   /**
@@ -26,6 +25,7 @@ abstract class EntityAccessControlHandlerBase extends EntityAccessControlHandler
         if (!$entity->isPublished()) {
           return AccessResult::allowedIfHasPermission($account, 'view unpublished ' . $this->entityTypeId . ' entities');
         }
+
         return AccessResult::allowedIfHasPermission($account, 'view published ' . $this->entityTypeId . ' entities');
 
       case 'update':

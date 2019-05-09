@@ -2,12 +2,10 @@
 
 namespace Drupal\lei_core\Entity;
 
-use Drupal\views\EntityViewsData;
-
 /**
- * Provides Views data for Review entities.
+ * Provides Views data for entities.
  */
-class ReviewViewsData extends EntityViewsData {
+class EntityViewsData extends \Drupal\views\EntityViewsData {
 
   /**
    * {@inheritdoc}
