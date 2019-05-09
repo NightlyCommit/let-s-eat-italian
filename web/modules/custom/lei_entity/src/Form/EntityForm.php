@@ -8,6 +8,7 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\lei_entity\EntityInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -68,6 +69,18 @@ class EntityForm extends ContentEntityForm
       $container->get('current_user'),
       $container->get('date.formatter')
     );
+  }
+
+  /**
+   * @param RouteMatchInterface $route_match
+   * @param string $entity_type_id
+   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
+   */
+  public function getEntityFromRouteMatch(RouteMatchInterface $route_match, $entity_type_id)
+  {
+    $entity = $route_match->getParameter('entity');
+
+    return $entity;
   }
 
   /**

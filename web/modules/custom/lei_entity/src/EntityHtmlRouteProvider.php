@@ -98,6 +98,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
   {
     if ($entity_type->hasLinkTemplate('revision')) {
       $route = new Route($entity_type->getLinkTemplate('revision'));
+
       $route
         ->setDefaults([
           '_controller' => '\Drupal\lei_entity\Controller\EntityController::revisionShow',
@@ -218,6 +219,23 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
         'type' => 'entity:' . $entity_type->id()
       ],
     ]);
+
+    $route->setRequirement('entity', '\d+');
+
+    return $route;
+  }
+
+  protected function getEditFormRoute(EntityTypeInterface $entity_type)
+  {
+    $route = parent::getEditFormRoute($entity_type);
+
+    $route->setOption('parameters', [
+      'entity' => [
+        'type' => 'entity:' . $entity_type->id()
+      ],
+    ]);
+
+    $route->setRequirement('entity', '\d+');
 
     return $route;
   }

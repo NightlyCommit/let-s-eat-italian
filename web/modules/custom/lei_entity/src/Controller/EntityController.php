@@ -111,7 +111,8 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
 
         if (!$revision->isDefaultRevision()) {
           $link = $revision->toLink($date, 'revision', [
-            'revision' => $vid
+            'entity' => $entity->id(),
+            'entity_revision' => $vid
           ])->toString();
         } else {
           $link = $revision->toLink($date)->toString();
