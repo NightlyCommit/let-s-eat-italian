@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function lei_entity_theme() {
+  return [
+    'lei_entity_edit_form' => [
+      'render element' => 'form',
+    ]
+  ];
+}

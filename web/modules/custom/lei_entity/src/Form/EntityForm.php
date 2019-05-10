@@ -165,6 +165,7 @@ class EntityForm extends ContentEntityForm
     }
 
     $form['#theme'] = 'lei_entity_edit_form';
+    $form['#attached']['library'][] = 'lei_entity/form';
 
     return $form;
   }

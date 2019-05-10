@@ -66,8 +66,7 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
       }
     }
 
-    // If no revision author has been set explicitly, make the restaurant owner the
-    // revision author.
+    // If no revision author has been set explicitly, make the entity owner the revision author.
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId($this->getOwnerId());
     }
