@@ -21,7 +21,9 @@ class EntityStorage extends SqlContentEntityStorage implements EntityStorageInte
   {
     return $this->database->query(
       'SELECT vid FROM {' . $this->getEntityType()->getRevisionTable() . '} WHERE id=:id ORDER BY vid',
-      [':id' => $entity->id()]
+      [
+        ':id' => $entity->id()
+      ]
     )->fetchCol();
   }
 
@@ -32,7 +34,9 @@ class EntityStorage extends SqlContentEntityStorage implements EntityStorageInte
   {
     return $this->database->query(
       'SELECT vid FROM {' . $this->getEntityType()->getRevisionDataTable() . '} WHERE uid = :uid ORDER BY vid',
-      [':uid' => $account->id()]
+      [
+        ':uid' => $account->id()
+      ]
     )->fetchCol();
   }
 

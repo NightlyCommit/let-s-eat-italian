@@ -2,6 +2,7 @@
 
 namespace Drupal\lei_entity\Form;
 
+use Drupal;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\ContentEntityForm;
@@ -24,29 +25,29 @@ class EntityForm extends ContentEntityForm
   /**
    * The Current User object.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var AccountInterface
    */
   protected $currentUser;
 
   /**
    * The date formatter service.
    *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   * @var DateFormatterInterface
    */
   protected $dateFormatter;
 
   /**
    * Constructs a NodeForm object.
    *
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   * @param EntityRepositoryInterface $entity_repository
    *   The entity repository.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+   * @param EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
+   * @param TimeInterface $time
    *   The time service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param AccountInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param DateFormatterInterface $date_formatter
    *   The date formatter service.
    */
   public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, AccountInterface $current_user = NULL, DateFormatterInterface $date_formatter = NULL)
@@ -180,8 +181,8 @@ class EntityForm extends ContentEntityForm
       $entity->setNewRevision();
 
       // If a new revision is created, save the current user as revision author.
-      $entity->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-      $entity->setRevisionUserId(\Drupal::currentUser()->id());
+      $entity->setRevisionCreationTime(Drupal::time()->getRequestTime());
+      $entity->setRevisionUserId(Drupal::currentUser()->id());
     } else {
       $entity->setNewRevision(FALSE);
     }
@@ -191,17 +192,21 @@ class EntityForm extends ContentEntityForm
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label @type.', [
-          '%label' => $entity->label(),
-          '@type' => $entity_type_abel
-        ]));
+        $this
+          ->messenger
+          ->addStatus($this->t('Created the %label @type.', [
+            '%label' => $entity->label(),
+            '@type' => $entity_type_abel
+          ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label @type.', [
-          '%label' => $entity->label(),
-          '@type' => $entity_type_abel
-        ]));
+        $this
+          ->messenger
+          ->addStatus($this->t('Saved the %label @type.', [
+            '%label' => $entity->label(),
+            '@type' => $entity_type_abel
+          ]));
     }
 
     $form_state->setRedirectUrl($entity->toUrl());

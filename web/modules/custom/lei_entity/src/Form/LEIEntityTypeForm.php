@@ -43,7 +43,7 @@ class LEIEntityTypeForm extends ConfigFormBase
    */
   protected function getEditableConfigNames()
   {
-    // TODO: Implement getEditableConfigNames() method.
+    return [];
   }
 
   /**
@@ -65,7 +65,7 @@ class LEIEntityTypeForm extends ConfigFormBase
    * Defines the settings form for Restaurant entities.
    *
    * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param FormStateInterface $form_state
    * @param string $entity_type_id
    *
    * @return array

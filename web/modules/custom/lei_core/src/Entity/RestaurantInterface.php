@@ -28,7 +28,6 @@ interface RestaurantInterface extends EntityInterface
 
   /**
    * @param string $address
-   * @return RestaurantInterface
    */
   public function setAddress($address);
 

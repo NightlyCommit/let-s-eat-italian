@@ -28,7 +28,7 @@ interface EntityStorageInterface extends ContentEntityStorageInterface
   /**
    * Gets a list of revision IDs having a given user as entity author.
    *
-   * @param \Drupal\Core\Session\AccountInterface $account The user entity.
+   * @param AccountInterface $account The user entity.
    *
    * @return int[] Revision IDs (in ascending order).
    */
@@ -46,7 +46,7 @@ interface EntityStorageInterface extends ContentEntityStorageInterface
   /**
    * Unsets the language for all entities with the given language.
    *
-   * @param \Drupal\Core\Language\LanguageInterface $language The language object.
+   * @param LanguageInterface $language The language object.
    */
   public function clearRevisionsLanguage(LanguageInterface $language);
 

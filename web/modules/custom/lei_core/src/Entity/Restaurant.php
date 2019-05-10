@@ -113,12 +113,10 @@ class Restaurant extends EntityBase implements RestaurantInterface
    * Sets the restaurant address.
    *
    * @param string $address
-   * @return RestaurantInterface
    */
   public function setAddress($address)
   {
     $this->set('address', $address);
-    return $this;
   }
 
   /**

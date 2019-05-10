@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lei_core\Entity;
+namespace Drupal\lei_entity\Entity;
 
 /**
  * Provides Views data for entities.

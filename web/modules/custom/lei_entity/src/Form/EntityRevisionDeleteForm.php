@@ -2,6 +2,8 @@
 
 namespace Drupal\lei_entity\Form;
 
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,44 +17,53 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class EntityRevisionDeleteForm extends ConfirmFormBase
 {
-
-
   /**
-   * The Restaurant revision.
+   * The revision.
    *
-   * @var \Drupal\lei_core\Entity\RestaurantInterface
+   * @var EntityInterface
    */
   protected $revision;
 
   /**
    * The entity.
    *
-   * @var \Drupal\lei_entity\EntityInterface
+   * @var EntityInterface
    */
   protected $entity;
 
   /**
    * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
    * The database connection.
    *
-   * @var \Drupal\Core\Database\Connection
+   * @var Connection
    */
   protected $connection;
 
   /**
+   * The date formatter service.
+   *
+   * @var DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * Constructs a new form.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param EntityTypeManagerInterface $entity_type_manager
+   * @param Connection $connection
+   * @param DateFormatterInterface $date_formatter
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager)
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection, DateFormatterInterface $date_formatter)
   {
     $this->entityTypeManager = $entity_type_manager;
+    $this->connection = $connection;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -61,7 +72,9 @@ class EntityRevisionDeleteForm extends ConfirmFormBase
   public static function create(ContainerInterface $container)
   {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('database'),
+      $container->get('date.formatter')
     );
   }
 
@@ -70,7 +83,7 @@ class EntityRevisionDeleteForm extends ConfirmFormBase
    */
   public function getFormId()
   {
-    return 'restaurant_revision_delete_confirm';
+    return 'entity_revision_delete_confirm';
   }
 
   /**
@@ -78,7 +91,9 @@ class EntityRevisionDeleteForm extends ConfirmFormBase
    */
   public function getQuestion()
   {
-    return t('Are you sure you want to delete the revision from %revision-date?', ['%revision-date' => format_date($this->revision->getRevisionCreationTime())]);
+    return t('Are you sure you want to delete the revision from %revision-date?', [
+      '%revision-date' => $this->dateFormatter->format($this->revision->getRevisionCreationTime()),
+    ]);
   }
 
   /**
@@ -123,15 +138,19 @@ class EntityRevisionDeleteForm extends ConfirmFormBase
       '%revision' => $this->revision->getRevisionId()
     ]);
 
-    drupal_set_message(t('Revision from %revision-date of @label %title has been deleted.', [
-      '%revision-date' => format_date($this->revision->getRevisionCreationTime()),
-      '@label' => $entity_type->getLabel(),
-      '%title' => $this->revision->label()
-    ]));
+    $this
+      ->messenger()
+      ->addStatus(t('Revision from %revision-date of @label %title has been deleted.', [
+        '%revision-date' => $this->dateFormatter->format($this->revision->getRevisionCreationTime()),
+        '@label' => $entity_type->getLabel(),
+        '%title' => $this->revision->label()
+      ]));
 
     $form_state->setRedirectUrl($this->entity->toUrl());
 
-    if ($this->connection->query('SELECT COUNT(DISTINCT vid) FROM {' . $entity_type->getRevisionDataTable() . '} WHERE id = :id', [':id' => $this->revision->id()])->fetchField() > 1) {
+    if ($this->connection->query('SELECT COUNT(DISTINCT vid) FROM {' . $entity_type->getRevisionDataTable() . '} WHERE id = :id', [
+        ':id' => $this->revision->id()
+      ])->fetchField() > 1) {
       $form_state->setRedirectUrl($this->entity->toUrl('version-history'));
     }
   }

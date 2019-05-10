@@ -7,7 +7,7 @@ use Drupal\Core\Entity\ContentEntityDeleteForm;
 /**
  * Provides a form for deleting entities.
  *
- * @ingroup lei_core
+ * @ingroup lei_entity
  */
 class EntityDeleteForm extends ContentEntityDeleteForm {
 

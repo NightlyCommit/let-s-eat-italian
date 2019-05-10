@@ -2,12 +2,11 @@
 
 namespace Drupal\lei_entity\Form;
 
+use Drupal;
 use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\lei_entity\EntityInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,36 +21,36 @@ class EntityRevisionRevertForm extends ConfirmFormBase
   /**
    * The entity revision.
    *
-   * @var \Drupal\lei_entity\EntityInterface
+   * @var EntityInterface
    */
   protected $revision;
 
   /**
    * The entity.
    *
-   * @var \Drupal\lei_entity\EntityInterface
+   * @var EntityInterface
    */
   protected $entity;
 
   /**
    * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
    * The date formatter service.
    *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   * @var DateFormatterInterface
    */
   protected $dateFormatter;
 
   /**
    * Constructs a new form.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param EntityTypeManagerInterface $entity_type_manager
+   * @param DateFormatterInterface $date_formatter
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, DateFormatterInterface $date_formatter)
   {
@@ -107,14 +106,6 @@ class EntityRevisionRevertForm extends ConfirmFormBase
   /**
    * {@inheritdoc}
    */
-  public function getDescription()
-  {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildForm(array $form, FormStateInterface $form_state, EntityInterface $entity = NULL, $entity_revision = NULL)
   {
     $this->entity = $entity;
@@ -145,9 +136,11 @@ class EntityRevisionRevertForm extends ConfirmFormBase
       '%title' => $this->revision->label(), '%revision' => $this->revision->getRevisionId()
     ]);
 
-    drupal_set_message(t($entityTypeLabel . ' %title has been reverted to the revision from %revision-date.', [
-      '%title' => $this->revision->label(), '%revision-date' => $this->dateFormatter->format($original_revision_timestamp)
-    ]));
+    $this
+      ->messenger()
+      ->addStatus(t($entityTypeLabel . ' %title has been reverted to the revision from %revision-date.', [
+        '%title' => $this->revision->label(), '%revision-date' => $this->dateFormatter->format($original_revision_timestamp)
+      ]));
 
     $form_state->setRedirectUrl($this->revision->toUrl('version-history'));
   }
@@ -155,16 +148,16 @@ class EntityRevisionRevertForm extends ConfirmFormBase
   /**
    * Prepares a revision to be reverted.
    *
-   * @param \Drupal\lei_entity\EntityInterface $revision
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param EntityInterface $revision
+   * @param FormStateInterface $form_state
    *
-   * @return \Drupal\lei_entity\EntityInterface
+   * @return EntityInterface
    */
   protected function prepareRevertedRevision(EntityInterface $revision, FormStateInterface $form_state)
   {
     $revision->setNewRevision();
     $revision->isDefaultRevision(TRUE);
-    $revision->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+    $revision->setRevisionCreationTime(Drupal::time()->getRequestTime());
 
     return $revision;
   }

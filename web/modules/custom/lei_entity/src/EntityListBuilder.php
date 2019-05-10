@@ -4,7 +4,6 @@ namespace Drupal\lei_entity;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
-use Drupal\lei_core\Entity\ReviewInterface;
 
 /**
  * Defines a class to build a listing of Review entities.
