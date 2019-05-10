@@ -21,10 +21,10 @@ class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
       'edit-form' => "/{$id}/{entity}/edit",
       'delete-form' => "/{$id}/{entity}/delete",
       'version-history' => "/{$id}/{entity}/revisions",
-      'revision' => "/{$id}/{entity}/revisions/{entity_revision}/view",
-      'revision_revert' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/revert",
-      'revision_delete' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/delete",
-      'translation_revert' => "/admin/content/{$id}/{entity}/revisions/{entity_revision}/revert/{langcode}",
+      'revision' => "/{$id}/{entity}/revision/{entity_revision}",
+      'revision_revert' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/revert",
+      'revision_delete' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/delete",
+      'translation_revert' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/revert/{langcode}",
       'collection' => "/admin/content/{$id}",
     ];
 

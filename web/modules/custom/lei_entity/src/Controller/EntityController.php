@@ -51,30 +51,38 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
   /**
    * Displays a revision.
    *
-   * @param int $revision The revision ID.
+   * @param EntityInterface $entity
+   * @param int $entity_revision The revision ID.
+   *
    * @return array An array suitable for drupal_render().
    */
-  public function revisionShow($revision)
+  public function revisionShow($entity, $entity_revision)
   {
-    /** @var EntityInterface $entity */
-    $entity = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadRevision($revision);
-    $view_builder = $this->entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
+    /** @var EntityInterface $revision */
+    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($entity_revision);
 
-    return $view_builder->view($entity);
+    $view_builder = $this->entityTypeManager()->getViewBuilder($revision->getEntityTypeId());
+
+    return $view_builder->view($revision);
   }
 
   /**
    * Page title callback for a revision.
    *
-   * @param int $revision The revision ID.
+   * @param EntityInterface $entity
+   * @param int $entity_revision The revision ID.
+   *
    * @return string The page title.
    */
-  public function revisionPageTitle($revision)
+  public function revisionPageTitle($entity, $entity_revision)
   {
-    /** @var EntityInterface $entity */
-    $entity = $this->entityTypeManager()->getStorage($this->getEntityTypeId())->loadRevision($revision);
+    /** @var EntityInterface $revision */
+    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($entity_revision);
 
-    return $this->t('Revision of %title from %date', ['%title' => $entity->label(), '%date' => $this->dateFormatter->format($entity->getRevisionCreationTime())]);
+    return $this->t('Revision of %title from %date', [
+      '%title' => $entity->label(),
+      '%date' => $this->dateFormatter->format($revision->getRevisionCreationTime())
+    ]);
   }
 
   /**
@@ -161,7 +169,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
           ];
         } else {
           $links = [];
-          
+
           if ($revertPermission) {
             $links['revert'] = [
               'title' => $vid < $entity->getRevisionId() ? $this->t('Revert') : $this->t('Set as current revision'),

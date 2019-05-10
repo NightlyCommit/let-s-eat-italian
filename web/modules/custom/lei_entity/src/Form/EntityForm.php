@@ -149,10 +149,7 @@ class EntityForm extends ContentEntityForm
       '#title' => t('Authoring information'),
       '#group' => 'advanced',
       '#attributes' => [
-        'class' => ['node-form-author'],
-      ],
-      '#attached' => [
-        'library' => ['node/drupal.node'],
+        'class' => ['lei_entity-form-author'],
       ],
       '#weight' => 90,
       '#optional' => TRUE,
@@ -166,7 +163,7 @@ class EntityForm extends ContentEntityForm
       $form['created']['#group'] = 'author';
     }
 
-    $form['#theme'] = 'node_edit_form';
+    $form['#theme'] = 'lei_entity_edit_form';
 
     return $form;
   }
@@ -190,25 +187,23 @@ class EntityForm extends ContentEntityForm
     }
 
     $status = parent::save($form, $form_state);
-    $entityTypeLabel = strtolower($this->getEntity()->getEntityType()->getLabel());
+    $entity_type_abel = strtolower($this->getEntity()->getEntityType()->getLabel());
 
     switch ($status) {
       case SAVED_NEW:
         drupal_set_message($this->t('Created the %label @type.', [
           '%label' => $entity->label(),
-          '@type' => $entityTypeLabel
+          '@type' => $entity_type_abel
         ]));
         break;
 
       default:
         drupal_set_message($this->t('Saved the %label @type.', [
           '%label' => $entity->label(),
-          '@type' => $entityTypeLabel
+          '@type' => $entity_type_abel
         ]));
     }
 
-    $form_state->setRedirect('entity.' . $this->getEntity()->getEntityTypeId() . '.canonical', [
-      $this->getEntity()->getEntityTypeId() => $entity->id()
-    ]);
+    $form_state->setRedirectUrl($entity->toUrl());
   }
 }

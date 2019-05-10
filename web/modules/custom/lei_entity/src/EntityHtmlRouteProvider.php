@@ -97,6 +97,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
   protected function getRevisionRoute(EntityTypeInterface $entity_type)
   {
     if ($entity_type->hasLinkTemplate('revision')) {
+      $entityTypeId = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision'));
 
       $route
@@ -104,8 +105,13 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
           '_controller' => '\Drupal\lei_entity\Controller\EntityController::revisionShow',
           '_title_callback' => '\Drupal\lei_entity\Controller\EntityController::revisionPageTitle',
         ])
-        ->setRequirement('_permission', 'access review revisions')
-        ->setOption('_admin_route', TRUE);
+        ->setRequirement('_permission', 'access ' . $entityTypeId . ' revisions')
+        ->setOption('_admin_route', TRUE)
+        ->setOption('parameters', [
+          'entity' => [
+            'type' => 'entity:' . $entityTypeId
+          ],
+        ]);
 
       return $route;
     }
@@ -123,17 +129,19 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
   protected function getRevisionRevertRoute(EntityTypeInterface $entity_type)
   {
     if ($entity_type->hasLinkTemplate('revision_revert')) {
+      $entityTypeId = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision_revert'));
+
       $route
         ->setDefaults([
           '_form' => '\Drupal\lei_entity\Form\EntityRevisionRevertForm',
           '_title' => 'Revert to earlier revision',
         ])
-        ->setRequirement('_permission', 'revert all review revisions')
+        ->setRequirement('_permission', 'revert all ' . $entityTypeId . ' revisions')
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
           'entity' => [
-            'type' => 'entity:' . $entity_type->id()
+            'type' => 'entity:' . $entityTypeId
           ],
         ]);
 
