@@ -130,7 +130,12 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
           '_title' => 'Revert to earlier revision',
         ])
         ->setRequirement('_permission', 'revert all review revisions')
-        ->setOption('_admin_route', TRUE);
+        ->setOption('_admin_route', TRUE)
+        ->setOption('parameters', [
+          'entity' => [
+            'type' => 'entity:' . $entity_type->id()
+          ],
+        ]);
 
       return $route;
     }

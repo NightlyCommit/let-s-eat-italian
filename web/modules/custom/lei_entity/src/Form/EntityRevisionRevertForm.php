@@ -4,6 +4,7 @@ namespace Drupal\lei_entity\Form;
 
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup lei_entity
  */
-abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
+class EntityRevisionRevertForm extends ConfirmFormBase
 {
 
   /**
@@ -26,11 +27,18 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
   protected $revision;
 
   /**
-   * The entity storage.
+   * The entity.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\lei_entity\EntityInterface
    */
-  protected $entityStorage;
+  protected $entity;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * The date formatter service.
@@ -40,19 +48,14 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
   protected $dateFormatter;
 
   /**
-   * @return string
-   */
-  abstract static function entityTypeId();
-
-  /**
    * Constructs a new form.
    *
-   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    */
-  public function __construct(EntityStorageInterface $entity_storage, DateFormatterInterface $date_formatter)
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, DateFormatterInterface $date_formatter)
   {
-    $this->entityStorage = $entity_storage;
+    $this->entityTypeManager = $entity_type_manager;
     $this->dateFormatter = $date_formatter;
   }
 
@@ -62,7 +65,7 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
   public static function create(ContainerInterface $container)
   {
     return new static(
-      $container->get('entity.manager')->getStorage(static::entityTypeId()),
+      $container->get('entity_type.manager'),
       $container->get('date.formatter')
     );
   }
@@ -72,7 +75,7 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
    */
   public function getFormId()
   {
-    return static::entityTypeId() . '_revision_revert_confirm';
+    return 'entity_revision_revert_confirm';
   }
 
   /**
@@ -90,9 +93,7 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
    */
   public function getCancelUrl()
   {
-    return new Url('entity.' . $this->revision->getEntityTypeId() . '.version_history', [
-      $this->revision->getEntityTypeId() => $this->revision->id()
-    ]);
+    return $this->revision->toUrl('version-history');
   }
 
   /**
@@ -114,9 +115,10 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $revision = NULL)
+  public function buildForm(array $form, FormStateInterface $form_state, EntityInterface $entity = NULL, $entity_revision = NULL)
   {
-    $this->revision = $this->entityStorage->loadRevision($revision);
+    $this->entity = $entity;
+    $this->revision = $this->entityTypeManager->getStorage($this->entity->getEntityTypeId())->loadRevision($entity_revision);
 
     $form = parent::buildForm($form, $form_state);
 
@@ -147,10 +149,7 @@ abstract class EntityRevisionRevertFormBase extends ConfirmFormBase
       '%title' => $this->revision->label(), '%revision-date' => $this->dateFormatter->format($original_revision_timestamp)
     ]));
 
-    $form_state->setRedirect(
-      'entity.' . $this->revision->getEntityTypeId() . '.version_history',
-      [$this->revision->getEntityTypeId() => $this->revision->id()]
-    );
+    $form_state->setRedirectUrl($this->revision->toUrl('version-history'));
   }
 
   /**
