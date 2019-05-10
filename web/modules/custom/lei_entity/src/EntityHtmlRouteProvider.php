@@ -161,14 +161,21 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
   protected function getRevisionDeleteRoute(EntityTypeInterface $entity_type)
   {
     if ($entity_type->hasLinkTemplate('revision_delete')) {
+      $entityTypeId = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision_delete'));
+
       $route
         ->setDefaults([
-          '_form' => '\Drupal\lei_entity\Form\ReviewRevisionDeleteForm',
+          '_form' => '\Drupal\lei_entity\Form\EntityRevisionDeleteForm',
           '_title' => 'Delete earlier revision',
         ])
-        ->setRequirement('_permission', 'delete all review revisions')
-        ->setOption('_admin_route', TRUE);
+        ->setRequirement('_permission', 'delete all ' . $entityTypeId . ' revisions')
+        ->setOption('_admin_route', TRUE)
+        ->setOption('parameters', [
+          'entity' => [
+            'type' => 'entity:' . $entityTypeId
+          ],
+        ]);
 
       return $route;
     }
