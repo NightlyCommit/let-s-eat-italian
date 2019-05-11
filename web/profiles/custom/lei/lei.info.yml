@@ -9,6 +9,7 @@ install:
   - field_ui
   - menu_ui
   - taxonomy
+  - views_ui
   - lei_core
 themes:
   - adminimal_theme

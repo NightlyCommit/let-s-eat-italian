@@ -81,6 +81,10 @@ class EntityForm extends ContentEntityForm
   {
     $entity = $route_match->getParameter('entity');
 
+    if (!$entity) {
+      $entity = $this->entityTypeManager->getStorage($entity_type_id)->create([]);
+    }
+
     return $entity;
   }
 
@@ -194,7 +198,7 @@ class EntityForm extends ContentEntityForm
     switch ($status) {
       case SAVED_NEW:
         $this
-          ->messenger
+          ->messenger()
           ->addStatus($this->t('Created the %label @type.', [
             '%label' => $entity->label(),
             '@type' => $entity_type_abel
@@ -203,7 +207,7 @@ class EntityForm extends ContentEntityForm
 
       default:
         $this
-          ->messenger
+          ->messenger()
           ->addStatus($this->t('Saved the %label @type.', [
             '%label' => $entity->label(),
             '@type' => $entity_type_abel

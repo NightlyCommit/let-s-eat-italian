@@ -4,13 +4,19 @@
 namespace Drupal\lei_entity;
 
 
+use Drupal;
 use Drupal\Core\Entity\EditorialContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\user\Entity\User;
 use Drupal\user\EntityOwnerTrait;
 
+/**
+ * @method User getOwner()
+ */
 abstract class EntityBase extends EditorialContentEntityBase implements EntityInterface
 {
   use EntityChangedTrait;
@@ -23,7 +29,7 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
   {
     parent::preCreate($storage_controller, $values);
     $values += [
-      'user_id' => \Drupal::currentUser()->id(),
+      'user_id' => Drupal::currentUser()->id(),
     ];
   }
 
@@ -80,9 +86,12 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    $fields['uid']
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The username of the entity author.'))
+    /** @var BaseFieldDefinition $uidField */
+    $uidField = $fields['uid'];
+
+    $uidField
+      ->setLabel(new TranslatableMarkup('Authored by'))
+      ->setDescription(new TranslatableMarkup('The username of the entity author.'))
       ->setRevisionable(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'hidden',
@@ -101,8 +110,8 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Published'))
-      ->setDescription(t('A boolean indicating whether the entity is published.'))
+      ->setLabel(new TranslatableMarkup('Published'))
+      ->setDescription(new TranslatableMarkup('A boolean indicating whether the entity is published.'))
       ->setRevisionable(TRUE)
       ->setDefaultValue(TRUE)
       ->setDisplayOptions('form', [
@@ -110,16 +119,16 @@ abstract class EntityBase extends EditorialContentEntityBase implements EntityIn
       ]);
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+      ->setLabel(new TranslatableMarkup('Created'))
+      ->setDescription(new TranslatableMarkup('The time that the entity was created.'));
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+      ->setLabel(new TranslatableMarkup('Changed'))
+      ->setDescription(new TranslatableMarkup('The time that the entity was last edited.'));
 
     $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Revision translation affected'))
-      ->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))
+      ->setLabel(new TranslatableMarkup('Revision translation affected'))
+      ->setDescription(new TranslatableMarkup('Indicates if the last edit of a translation belongs to current revision.'))
       ->setReadOnly(TRUE)
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE);

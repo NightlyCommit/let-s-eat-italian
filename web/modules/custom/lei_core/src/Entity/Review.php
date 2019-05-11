@@ -4,8 +4,10 @@
 namespace Drupal\lei_core\Entity;
 
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\lei_entity\EntityBase;
 
 /**
@@ -28,18 +30,56 @@ class Review extends EntityBase implements ReviewInterface
   {
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['restaurant'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Restaurant'))
+      ->setSetting('target_type', 'restaurant')
+      ->setDescription(new TranslatableMarkup('The restaurant the review is about.'))
+      ->setRevisionable(TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'entity_reference_entity_view',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
     $fields['score'] = BaseFieldDefinition::create('float')
-      ->setLabel(t('Score'))
+      ->setLabel(new TranslatableMarkup('Score'))
       ->setDescription(t('The score of the review.'))
       ->setRevisionable(TRUE)
       ->setDefaultValue(NULL)
+      ->addPropertyConstraints('value', [
+        'Range' => [
+          'min' => 0,
+          'max' => 5
+        ]
+      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'number',
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
     return $fields;
+  }
+
+  public function label()
+  {
+    return t('A review by %author', [
+      '%author' => $this->getOwner()->label()
+    ]);
   }
 
   /**
@@ -55,7 +95,7 @@ class Review extends EntityBase implements ReviewInterface
    */
   public function getScore()
   {
-    // TODO: Implement getScore() method.
+    return $this->get('score')->value;
   }
 
   /**
@@ -63,7 +103,7 @@ class Review extends EntityBase implements ReviewInterface
    */
   public function getRestaurantId()
   {
-    // TODO: Implement getRestaurantId() method.
+    return $this->get('restaurant')->target_id;
   }
 
   /**
@@ -71,6 +111,15 @@ class Review extends EntityBase implements ReviewInterface
    */
   public function getRestaurant()
   {
-    // TODO: Implement getRestaurant() method.
+    return $this->get('restaurant')->entity;
+  }
+
+  protected function invalidateTagsOnSave($update)
+  {
+    $restaurant = $this->getRestaurant();
+
+    Cache::invalidateTags($restaurant->getCacheTags());
+
+    parent::invalidateTagsOnSave($update);
   }
 }

@@ -1,4 +1,5 @@
 services:
+  # see https://www.drupal.org/project/drupal/issues/3053490 for why wee need to entirely replace entity_type.manager
   entity_type.manager:
     class: Drupal\lei_entity\Entity\EntityTypeManager
     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@string_translation', '@class_resolver', '@entity.last_installed_schema.repository']

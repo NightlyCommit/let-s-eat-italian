@@ -35,4 +35,9 @@ interface RestaurantInterface extends EntityInterface
    * @return float
    */
   public function getRating();
+
+  /**
+   * @return ReviewInterface[]
+   */
+  public function getReviews();
 }

@@ -7,7 +7,7 @@ use Drupal\Core\Entity\Annotation\ContentEntityType;
 /**
  * Defines a LEI entity type annotation object.
  *
- * @ingroup entity_api
+ * @ingroup lei_entity
  *
  * @Annotation
  */
