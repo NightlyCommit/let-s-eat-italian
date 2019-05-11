@@ -1,10 +1,7 @@
 <?php
 
-
 namespace Drupal\lei_core\Entity;
 
-
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -112,14 +109,5 @@ class Review extends EntityBase implements ReviewInterface
   public function getRestaurant()
   {
     return $this->get('restaurant')->entity;
-  }
-
-  protected function invalidateTagsOnSave($update)
-  {
-    $restaurant = $this->getRestaurant();
-
-    Cache::invalidateTags($restaurant->getCacheTags());
-
-    parent::invalidateTagsOnSave($update);
   }
 }

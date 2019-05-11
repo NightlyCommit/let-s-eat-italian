@@ -2,6 +2,7 @@
 
 namespace Drupal\lei_core\Entity;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -10,7 +11,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\lei_core\Field\RestaurantRatingItemList;
 use Drupal\lei_core\Field\RestaurantReviewsItemList;
 use Drupal\lei_entity\EntityBase;
-use Drupal\lei_entity\EntityStorageInterface;
 
 /**
  * Defines the Restaurant entity.
@@ -82,6 +82,10 @@ class Restaurant extends EntityBase implements RestaurantInterface
       ->setComputed(TRUE)
       ->setClass(RestaurantRatingItemList::class)
       ->setDescription(new TranslatableMarkup('The rating of the restaurant.'))
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'default',
+      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['reviews'] = BaseFieldDefinition::create('entity_reference')
@@ -94,6 +98,23 @@ class Restaurant extends EntityBase implements RestaurantInterface
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
 
     return $fields;
+  }
+
+  /**
+   * @return array|string[]
+   */
+  public function getCacheTagsToInvalidate()
+  {
+    $reviewsTags = [];
+
+    foreach ($this->getReviews() as $review) {
+      $reviewsTags[] = $review->getCacheTags();
+    }
+
+    return Cache::mergeTags(
+      parent::getCacheTagsToInvalidate(),
+      $reviewsTags
+    );
   }
 
   /**
