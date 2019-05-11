@@ -1,0 +1,3 @@
+lei_entity.entity_menu_links:
+  deriver: 'Drupal\lei_entity\Plugin\Derivative\EntityMenuLinks'
+  weight: 0

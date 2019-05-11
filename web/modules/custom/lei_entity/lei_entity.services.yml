@@ -1,0 +1,13 @@
+services:
+  # see https://www.drupal.org/project/drupal/issues/3053490 for why wee need to entirely replace entity_type.manager
+  entity_type.manager:
+    class: Drupal\lei_entity\Entity\EntityTypeManager
+    arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@string_translation', '@class_resolver', '@entity.last_installed_schema.repository']
+    parent: container.trait
+    tags:
+      - { name: plugin_manager_cache_clear }
+  # @see https://www.drupal.org/project/drupal/issues/2991698#comment-13101114 for why we have to entirely replace access_check.entity instead of providing a supplementary access check
+  access_check.entity:
+    class: Drupal\lei_entity\Entity\EntityAccessCheck
+    tags:
+      - { name: access_check, applies_to: _entity_access }

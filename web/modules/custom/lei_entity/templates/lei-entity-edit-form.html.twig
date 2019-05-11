@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Theme override for an entity edit form.
+ *
+ * Two column template for the entity add/edit form.
+ *
+ * This template will be used when an entity edit form specifies 'lei_entity_edit_form'
+ * as its #theme callback.  Otherwise, by default, entity add/edit forms will be
+ * themed by form.html.twig.
+ *
+ * Available variables:
+ * - form: The entity add/edit form.
+ */
+#}
+<div class="layout-lei-entity-form clearfix">
+    <div class="layout-region layout-region-lei-entity-main">
+        {{ form|without('advanced', 'actions') }}
+    </div>
+    <div class="layout-region layout-region-lei-entity-secondary">
+        {{ form.advanced }}
+    </div>
+    <div class="layout-region layout-region-lei-entity-footer">
+        {{ form.actions }}
+    </div>
+</div>

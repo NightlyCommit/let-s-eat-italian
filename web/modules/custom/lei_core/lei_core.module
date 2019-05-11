@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains lei_core.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function lei_core_help($route_name, RouteMatchInterface $route_match)
+{
+  switch ($route_name) {
+    // Main module help for the lei_core module.
+    case 'help.page.lei_core':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Let&#039;&#039;s eat italian core features') . '</p>';
+      return $output;
+
+    default:
+  }
+}

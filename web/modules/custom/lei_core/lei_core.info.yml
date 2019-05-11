@@ -1,0 +1,7 @@
+name: 'Let''s eat italian - Core'
+type: module
+description: 'Let''s eat italian core features'
+core: 8.x
+package: 'LEI'
+dependencies:
+  - lei_entity

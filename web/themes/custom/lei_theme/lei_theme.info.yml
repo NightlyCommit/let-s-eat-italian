@@ -1,0 +1,12 @@
+name: lei_theme
+type: theme
+description: 'Let''s eat italian theme'
+package: LEI
+core: 8.x
+libraries:
+  - lei_theme/global-styling
+ 
+base theme: false
+
+regions:
+  content: Content

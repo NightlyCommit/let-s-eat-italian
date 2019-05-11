@@ -1,0 +1,36 @@
+drupal.lei_entity:
+  version: VERSION
+  css:
+    layout:
+      css/lei_entity.module.css: {}
+  js:
+    lei_entity.js: {}
+  dependencies:
+    - core/drupal.entity-form
+    - core/drupalSettings
+
+drupal.lei_entity.preview:
+  version: VERSION
+  css:
+    theme:
+      css/lei_entity.preview.css: {}
+  js:
+    lei_entity.preview.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.dialog
+    - core/drupal.form
+
+form:
+  version: VERSION
+  css:
+    layout:
+      css/lei_entity.module.css: {}
+
+drupal.lei_entity.admin:
+  version: VERSION
+  css:
+    theme:
+      css/lei_entity.admin.css: {}
