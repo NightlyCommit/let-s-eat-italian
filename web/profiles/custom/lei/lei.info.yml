@@ -11,6 +11,7 @@ install:
   - taxonomy
   - views_ui
   - content_translation
+  - media_library
   - lei_core
 themes:
   - adminimal_theme
