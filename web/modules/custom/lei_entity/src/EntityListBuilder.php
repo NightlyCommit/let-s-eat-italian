@@ -27,15 +27,7 @@ class EntityListBuilder extends \Drupal\Core\Entity\EntityListBuilder
    */
   public function buildRow(EntityInterface $entity)
   {
-    $entityTypeId = $entity->getEntityTypeId();
-
-    $row['name'] = Link::createFromRoute(
-      $entity->label(),
-      "entity.{$entityTypeId}.canonical",
-      [
-        'entity' => $entity->id()
-      ]
-    );
+    $row['name'] = $entity->toLink($entity->label());
 
     return $row + parent::buildRow($entity);
   }

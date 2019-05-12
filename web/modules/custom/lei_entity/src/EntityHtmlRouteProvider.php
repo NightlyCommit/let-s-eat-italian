@@ -3,7 +3,7 @@
 namespace Drupal\lei_entity;
 
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
+use Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Route;
  * @see \Drupal\Core\Entity\Routing\AdminHtmlRouteProvider
  * @see \Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider
  */
-class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
+class EntityHtmlRouteProvider extends DefaultHtmlRouteProvider
 {
 
   /**
@@ -261,5 +261,38 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
       ]);
 
     return $route;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getAddFormRoute(EntityTypeInterface $entity_type)
+  {
+    if ($route = parent::getAddFormRoute($entity_type)) {
+      $route->setOption('_' . $entity_type->id() . '_operation_route', TRUE);
+      return $route;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditFormRoute(EntityTypeInterface $entity_type)
+  {
+    if ($route = parent::getEditFormRoute($entity_type)) {
+      $route->setOption('_' . $entity_type->id() . '_operation_route', TRUE);
+      return $route;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDeleteFormRoute(EntityTypeInterface $entity_type)
+  {
+    if ($route = parent::getDeleteFormRoute($entity_type)) {
+      $route->setOption('_' . $entity_type->id() . '_operation_route', TRUE);
+      return $route;
+    }
   }
 }

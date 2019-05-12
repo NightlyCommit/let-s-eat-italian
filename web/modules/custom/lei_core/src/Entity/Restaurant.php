@@ -99,6 +99,27 @@ class Restaurant extends EntityBase implements RestaurantInterface
       ->setDisplayConfigurable('view', TRUE)
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
 
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Type'))
+      ->setSetting('target_type', 'restaurant_type')
+      ->setDescription(new TranslatableMarkup('The type of the restaurant.'))
+      ->setRevisionable(TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'label'
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
     return $fields;
   }
 
@@ -177,5 +198,21 @@ class Restaurant extends EntityBase implements RestaurantInterface
     }
 
     return $reviews;
+  }
+
+  /**
+   * @return RestaurantTypeInterface
+   */
+  public function getType()
+  {
+    return $this->get('type')->entity;
+  }
+
+  /**
+   * @param RestaurantTypeInterface $type
+   */
+  public function setType(RestaurantTypeInterface $type)
+  {
+    $this->set('type', $type);
   }
 }
