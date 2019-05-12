@@ -14,15 +14,15 @@ class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
     $id = $definition['id'];
 
     $defaultDefinition['links'] = [
-      'canonical' => "/{$id}/{entity}",
+      'canonical' => "/{$id}/{{$id}}",
       'add-form' => "/{$id}/add",
-      'edit-form' => "/{$id}/{entity}/edit",
-      'delete-form' => "/{$id}/{entity}/delete",
-      'version-history' => "/{$id}/{entity}/revisions",
-      'revision' => "/{$id}/{entity}/revision/{entity_revision}",
-      'revision_revert' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/revert",
-      'revision_delete' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/delete",
-      'translation_revert' => "/admin/content/{$id}/{entity}/revision/{entity_revision}/revert/{langcode}",
+      'edit-form' => "/{$id}/{{$id}}/edit",
+      'delete-form' => "/{$id}/{{$id}}/delete",
+      'version-history' => "/{$id}/{{$id}}/revisions",
+      'revision' => "/{$id}/{{$id}}/revision/{{$id}_revision}",
+      'revision_revert' => "/admin/content/{$id}/{{$id}}/revision/{{$id}_revision}/revert",
+      'revision_delete' => "/admin/content/{$id}/{{$id}}/revision/{{$id}_revision}/delete",
+      'translation_revert' => "/admin/content/{$id}/{{$id}}/revision/{{$id}_revision}/revert/{langcode}",
       'collection' => "/admin/content/{$id}",
     ];
 

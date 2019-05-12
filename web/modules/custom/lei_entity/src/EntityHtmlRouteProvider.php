@@ -47,7 +47,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     }
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
-      $collection->add("$entity_type_id.settings", $settings_form_route);
+      $collection->add("{$entity_type_id}.settings", $settings_form_route);
     }
 
     return $collection;
@@ -68,19 +68,20 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     $route = NULL;
 
     if ($entity_type->hasLinkTemplate('version-history')) {
+      $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('version-history'));
 
       $route
         ->setDefaults([
           '_title' => "{$entity_type->getLabel()} revisions",
           '_controller' => '\Drupal\lei_entity\Controller\EntityController::revisionOverview',
+          'entity_type_id' => $entity_type_id
         ])
-        ->setRequirement('_permission', 'access ' . $entity_type->id() . ' revisions')
-        ->setRequirement('entity', '\d+')
+        ->setRequirement('_permission', 'access ' . $entity_type_id . ' revisions')
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
-          'entity' => [
-            'type' => 'entity:' . $entity_type->id()
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id
           ],
         ]);
     }
@@ -103,19 +104,20 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     $route = NULL;
 
     if ($entity_type->hasLinkTemplate('revision')) {
-      $entityTypeId = $entity_type->id();
+      $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision'));
 
       $route
         ->setDefaults([
           '_controller' => '\Drupal\lei_entity\Controller\EntityController::revisionShow',
           '_title_callback' => '\Drupal\lei_entity\Controller\EntityController::revisionPageTitle',
+          'entity_type_id' => $entity_type_id
         ])
-        ->setRequirement('_permission', 'access ' . $entityTypeId . ' revisions')
+        ->setRequirement('_permission', 'access ' . $entity_type_id . ' revisions')
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
-          'entity' => [
-            'type' => 'entity:' . $entityTypeId
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id
           ],
         ]);
     }
@@ -138,19 +140,20 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     $route = NULL;
 
     if ($entity_type->hasLinkTemplate('revision_revert')) {
-      $entityTypeId = $entity_type->id();
+      $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision_revert'));
 
       $route
         ->setDefaults([
           '_form' => '\Drupal\lei_entity\Form\EntityRevisionRevertForm',
           '_title' => 'Revert to earlier revision',
+          'entity_type_id' => $entity_type_id
         ])
-        ->setRequirement('_permission', 'revert all ' . $entityTypeId . ' revisions')
+        ->setRequirement('_permission', 'revert all ' . $entity_type_id . ' revisions')
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
-          'entity' => [
-            'type' => 'entity:' . $entityTypeId
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id
           ],
         ]);
     }
@@ -173,19 +176,20 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     $route = NULL;
 
     if ($entity_type->hasLinkTemplate('revision_delete')) {
-      $entityTypeId = $entity_type->id();
+      $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('revision_delete'));
 
       $route
         ->setDefaults([
           '_form' => '\Drupal\lei_entity\Form\EntityRevisionDeleteForm',
           '_title' => 'Delete earlier revision',
+          'entity_type_id' => $entity_type_id
         ])
-        ->setRequirement('_permission', 'delete all ' . $entityTypeId . ' revisions')
+        ->setRequirement('_permission', 'delete all ' . $entity_type_id . ' revisions')
         ->setOption('_admin_route', TRUE)
         ->setOption('parameters', [
-          'entity' => [
-            'type' => 'entity:' . $entityTypeId
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id
           ],
         ]);
     }
@@ -208,15 +212,22 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
     $route = NULL;
 
     if ($entity_type->hasLinkTemplate('translation_revert')) {
+      $entity_type_id = $entity_type->id();
       $route = new Route($entity_type->getLinkTemplate('translation_revert'));
 
       $route
         ->setDefaults([
           '_form' => '\Drupal\lei_entity\Form\ReviewRevisionRevertTranslationForm',
           '_title' => 'Revert to earlier revision of a translation',
+          'entity_type_id' => $entity_type_id
         ])
-        ->setRequirement('_permission', 'revert all ' . $entity_type->id() . ' revisions')
-        ->setOption('_admin_route', TRUE);
+        ->setRequirement('_permission', 'revert all ' . $entity_type_id . ' revisions')
+        ->setOption('_admin_route', TRUE)
+        ->setOption('parameters', [
+          $entity_type_id => [
+            'type' => 'entity:' . $entity_type_id
+          ],
+        ]);
     }
 
     return $route;
@@ -233,46 +244,22 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
    */
   protected function getSettingsFormRoute(EntityTypeInterface $entity_type)
   {
-    $route = new Route("/admin/structure/{$entity_type->id()}/settings");
+    $entity_type_id = $entity_type->id();
+    $route = new Route("/admin/structure/{$entity_type_id}/settings");
 
     $route
       ->setDefaults([
         '_form' => '\Drupal\lei_entity\Form\LEIEntityTypeForm',
         '_title' => "{$entity_type->getLabel()} settings",
-        'entity_type_id' => $entity_type->id()
+        'entity_type_id' => $entity_type_id
       ])
       ->setRequirement('_permission', $entity_type->getAdminPermission())
-      ->setOption('_admin_route', TRUE);
-
-    return $route;
-  }
-
-  protected function getCanonicalRoute(EntityTypeInterface $entity_type)
-  {
-    $route = parent::getCanonicalRoute($entity_type);
-
-    $route->setOption('parameters', [
-      'entity' => [
-        'type' => 'entity:' . $entity_type->id()
-      ],
-    ]);
-
-    $route->setRequirement('entity', '\d+');
-
-    return $route;
-  }
-
-  protected function getEditFormRoute(EntityTypeInterface $entity_type)
-  {
-    $route = parent::getEditFormRoute($entity_type);
-
-    $route->setOption('parameters', [
-      'entity' => [
-        'type' => 'entity:' . $entity_type->id()
-      ],
-    ]);
-
-    $route->setRequirement('entity', '\d+');
+      ->setOption('_admin_route', TRUE)
+      ->setOption('parameters', [
+        $entity_type_id => [
+          'type' => 'entity:' . $entity_type_id
+        ],
+      ]);
 
     return $route;
   }

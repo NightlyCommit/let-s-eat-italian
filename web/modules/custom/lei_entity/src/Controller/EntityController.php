@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\lei_entity\EntityInterface;
 use Drupal\lei_entity\EntityStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -51,15 +52,18 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
   /**
    * Displays a revision.
    *
-   * @param EntityInterface $entity
-   * @param int $entity_revision The revision ID.
+   * @param RouteMatchInterface $route_match
+   * @param string $entity_type_id
    *
    * @return array An array suitable for drupal_render().
    */
-  public function revisionShow($entity, $entity_revision)
+  public function revisionShow(RouteMatchInterface $route_match, $entity_type_id = NULL)
   {
+    /** @var EntityInterface $entity */
+    $entity = $route_match->getParameter($entity_type_id);
+
     /** @var EntityInterface $revision */
-    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($entity_revision);
+    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($route_match->getParameter($entity_type_id . '_revision'));
 
     $view_builder = $this->entityTypeManager()->getViewBuilder($revision->getEntityTypeId());
 
@@ -69,15 +73,18 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
   /**
    * Page title callback for a revision.
    *
-   * @param EntityInterface $entity
-   * @param int $entity_revision The revision ID.
+   * @param RouteMatchInterface $route_match
+   * @param string $entity_type_id
    *
    * @return string The page title.
    */
-  public function revisionPageTitle($entity, $entity_revision)
+  public function revisionPageTitle(RouteMatchInterface $route_match, $entity_type_id = NULL)
   {
+    /** @var EntityInterface $entity */
+    $entity = $route_match->getParameter($entity_type_id);
+
     /** @var EntityInterface $revision */
-    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($entity_revision);
+    $revision = $this->entityTypeManager()->getStorage($entity->getEntityTypeId())->loadRevision($route_match->getParameter($entity_type_id . '_revision'));
 
     return $this->t('Revision of %title from %date', [
       '%title' => $entity->label(),
@@ -88,11 +95,16 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
   /**
    * Generates an overview table of older revisions of an entity .
    *
-   * @param EntityInterface $entity An entity.
+   * @param RouteMatchInterface $route_match
+   * @param string $entity_type_id
+   *
    * @return array An array as expected by drupal_render().
    */
-  public function revisionOverview(EntityInterface $entity)
+  public function revisionOverview(RouteMatchInterface $route_match, $entity_type_id = NULL)
   {
+    /** @var EntityInterface $entity */
+    $entity = $route_match->getParameter($entity_type_id);
+
     $account = $this->currentUser();
     $langcode = $entity->language()->getId();
     $langname = $entity->language()->getName();
@@ -223,6 +235,7 @@ class EntityController extends ControllerBase implements ContainerInjectionInter
       ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
       ->pager(50)
       ->execute();
+
     return array_keys($result);
   }
 }
