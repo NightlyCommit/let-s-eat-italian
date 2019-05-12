@@ -6,3 +6,8 @@ services:
     parent: container.trait
     tags:
       - { name: plugin_manager_cache_clear }
+  lei_entity.admin_route_subscriber:
+    class: Drupal\lei_entity\EventSubscriber\AdminRouteSubscriber
+    arguments: ['@config.factory', '@router.builder', '@entity_type.manager']
+    tags:
+      - { name: event_subscriber }

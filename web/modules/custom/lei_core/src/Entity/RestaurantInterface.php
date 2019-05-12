@@ -40,4 +40,14 @@ interface RestaurantInterface extends EntityInterface
    * @return ReviewInterface[]
    */
   public function getReviews();
+
+  /**
+   * @return RestaurantTypeInterface
+   */
+  public function getType();
+
+  /**
+   * @param RestaurantTypeInterface $type
+   */
+  public function setType(RestaurantTypeInterface $type);
 }
