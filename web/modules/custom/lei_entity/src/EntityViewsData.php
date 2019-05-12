@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lei_entity\Entity;
+namespace Drupal\lei_entity;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityManagerInterface;

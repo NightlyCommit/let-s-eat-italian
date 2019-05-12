@@ -10,3 +10,7 @@ function lei_entity_theme() {
     ]
   ];
 }
+
+function lei_entity_configuration_element_submit() {
+
+}

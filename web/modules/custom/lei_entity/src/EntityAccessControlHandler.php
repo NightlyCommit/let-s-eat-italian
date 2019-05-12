@@ -2,7 +2,6 @@
 
 namespace Drupal\lei_entity;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
@@ -13,11 +12,10 @@ use Drupal\Core\Access\AccessResult;
  */
 class EntityAccessControlHandler extends \Drupal\Core\Entity\EntityAccessControlHandler
 {
-
   /**
    * {@inheritdoc}
    */
-  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account)
+  protected function checkAccess(\Drupal\Core\Entity\EntityInterface $entity, $operation, AccountInterface $account)
   {
     /** @var \Drupal\lei_entity\EntityInterface $entity */
     switch ($operation) {
@@ -46,5 +44,4 @@ class EntityAccessControlHandler extends \Drupal\Core\Entity\EntityAccessControl
   {
     return AccessResult::allowedIfHasPermission($account, 'add ' . $this->entityTypeId . ' entities');
   }
-
 }
