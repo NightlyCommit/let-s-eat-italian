@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Drupal\lei_entity\Entity;
+namespace Drupal\lei_entity;
 
 
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -21,7 +21,7 @@ class EntityTypeManager extends \Drupal\Core\Entity\EntityTypeManager
 {
   public function __construct(\Traversable $namespaces, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, TranslationInterface $string_translation, ClassResolverInterface $class_resolver, EntityLastInstalledSchemaRepositoryInterface $entity_last_installed_schema_repository, array $additional_annotation_namespaces = [])
   {
-    parent::__construct($namespaces, $module_handler, $cache, $string_translation, $class_resolver, $entity_last_installed_schema_repository, $additional_annotation_namespaces);
+    parent::__construct($namespaces, $module_handler, $cache, $string_translation, $class_resolver, $entity_last_installed_schema_repository);
 
     $this->discovery = new AnnotatedClassDiscovery('Entity', $namespaces, 'Drupal\Core\Entity\Annotation\EntityType', [
       'Drupal\lei_entity\Entity\Annotation'

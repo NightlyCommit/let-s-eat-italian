@@ -2,14 +2,14 @@
 
 namespace Drupal\lei_entity\Plugin\Derivative;
 
-use Drupal\lei_entity\Entity\LEIEntityTypeInterface;
+use Drupal\lei_entity\Entity\EntityTypeInterface;
 
 class EntityLocalTasks extends DeriverBase
 {
   /**
    * {@inheritdoc}
    */
-  public function getDerivatives(LEIEntityTypeInterface $entityType, array $base_plugin_definition)
+  public function getDerivatives(EntityTypeInterface $entityType, array $base_plugin_definition)
   {
     $derivatives = [];
     $entityTypeId = $entityType->id();

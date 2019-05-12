@@ -6,7 +6,7 @@ namespace Drupal\lei_entity\Plugin\Derivative;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Drupal\lei_entity\Entity\LEIEntityTypeInterface;
+use Drupal\lei_entity\Entity\EntityTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class DeriverBase extends \Drupal\Component\Plugin\Derivative\DeriverBase  implements ContainerDeriverInterface
@@ -42,7 +42,7 @@ abstract class DeriverBase extends \Drupal\Component\Plugin\Derivative\DeriverBa
     $entityTypes = $this->entityTypeManager->getDefinitions();
 
     foreach ($entityTypes as $entityTypeId => $entityType) {
-      if ($entityType instanceof LEIEntityTypeInterface) {
+      if ($entityType instanceof EntityTypeInterface) {
         $this->derivatives += $this->getDerivatives($entityType, $base_plugin_definition);
       }
     }
@@ -50,5 +50,5 @@ abstract class DeriverBase extends \Drupal\Component\Plugin\Derivative\DeriverBa
     return $this->derivatives;
   }
 
-  abstract protected function getDerivatives(LEIEntityTypeInterface $entityType, array $base_plugin_definition);
+  abstract protected function getDerivatives(EntityTypeInterface $entityType, array $base_plugin_definition);
 }

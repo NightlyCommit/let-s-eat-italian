@@ -74,7 +74,7 @@ class Review extends EntityBase implements ReviewInterface
 
   public function label()
   {
-    return t('A review by %author', [
+    return new TranslatableMarkup('A review by %author', [
       '%author' => $this->getOwner()->label()
     ]);
   }

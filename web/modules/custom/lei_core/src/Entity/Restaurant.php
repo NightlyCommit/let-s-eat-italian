@@ -36,6 +36,7 @@ class Restaurant extends EntityBase implements RestaurantInterface
       ->setLabel(new TranslatableMarkup('Name'))
       ->setDescription(new TranslatableMarkup('The name of the restaurant.'))
       ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -79,6 +80,7 @@ class Restaurant extends EntityBase implements RestaurantInterface
     $fields['rating'] = BaseFieldDefinition::create('float')
       ->setLabel(new TranslatableMarkup('Rating'))
       ->setComputed(TRUE)
+      ->setTranslatable(FALSE)
       ->setClass(RestaurantRatingItemList::class)
       ->setDescription(new TranslatableMarkup('The rating of the restaurant.'))
       ->setDisplayOptions('view', [
@@ -90,6 +92,7 @@ class Restaurant extends EntityBase implements RestaurantInterface
     $fields['reviews'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(new TranslatableMarkup('Reviews'))
       ->setComputed(TRUE)
+      ->setTranslatable(FALSE)
       ->setClass(RestaurantReviewsItemList::class)
       ->setSetting('target_type', 'review')
       ->setDescription(new TranslatableMarkup('The reviews of the restaurant.'))
