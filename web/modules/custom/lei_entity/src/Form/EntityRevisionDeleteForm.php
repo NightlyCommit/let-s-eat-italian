@@ -115,10 +115,12 @@ class EntityRevisionDeleteForm extends ConfirmFormBase
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, EntityInterface $entity = NULL, $entity_revision = NULL)
+  public function buildForm(array $form, FormStateInterface $form_state, $entity_type_id = NULL)
   {
-    $this->entity = $entity;
-    $this->revision = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadRevision($entity_revision);
+    $route_match = $this->getRouteMatch();
+
+    $this->entity = $route_match->getParameter($entity_type_id);
+    $this->revision = $this->entityTypeManager->getStorage($this->entity->getEntityTypeId())->loadRevision($route_match->getParameter($entity_type_id . '_revision'));
 
     $form = parent::buildForm($form, $form_state);
 

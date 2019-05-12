@@ -73,22 +73,6 @@ class EntityForm extends ContentEntityForm
   }
 
   /**
-   * @param RouteMatchInterface $route_match
-   * @param string $entity_type_id
-   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
-   */
-  public function getEntityFromRouteMatch(RouteMatchInterface $route_match, $entity_type_id)
-  {
-    $entity = $route_match->getParameter('entity');
-
-    if (!$entity) {
-      $entity = $this->entityTypeManager->getStorage($entity_type_id)->create([]);
-    }
-
-    return $entity;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state)
