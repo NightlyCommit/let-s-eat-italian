@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Drupal\lei_entity;
-
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -40,5 +38,4 @@ interface EntityInterface extends ContentEntityInterface, RevisionLogInterface, 
    * @param bool $published
    */
   public function setPublished($published);
-
 }

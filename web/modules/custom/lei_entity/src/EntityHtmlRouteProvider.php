@@ -4,7 +4,6 @@ namespace Drupal\lei_entity;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
-use Drupal\lei_entity\Entity\LEIEntityTypeInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -21,7 +20,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
    */
   public function getRoutes(EntityTypeInterface $entity_type)
   {
-    /** @var LEIEntityTypeInterface $entity_type */
+    /** @var EntityTypeInterface $entity_type */
     $collection = parent::getRoutes($entity_type);
 
     $entity_type_id = $entity_type->id();
@@ -249,7 +248,7 @@ class EntityHtmlRouteProvider extends AdminHtmlRouteProvider
 
     $route
       ->setDefaults([
-        '_form' => '\Drupal\lei_entity\Form\LEIEntityTypeForm',
+        '_form' => '\Drupal\lei_entity\Form\EntityTypeForm',
         '_title' => "{$entity_type->getLabel()} settings",
         'entity_type_id' => $entity_type_id
       ])

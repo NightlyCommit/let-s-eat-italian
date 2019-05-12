@@ -16,5 +16,5 @@ class LEIEntityType extends ContentEntityType
   /**
    * {@inheritdoc}
    */
-  public $entity_type_class = 'Drupal\lei_entity\Entity\LEIEntityType';
+  public $entity_type_class = 'Drupal\lei_entity\Entity\EntityType';
 }

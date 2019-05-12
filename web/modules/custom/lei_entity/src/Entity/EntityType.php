@@ -4,7 +4,7 @@ namespace Drupal\lei_entity\Entity;
 
 use Drupal\Core\Entity\ContentEntityType;
 
-class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
+class EntityType extends ContentEntityType implements EntityTypeInterface
 {
   /** @var array */
   protected $routeNames;
@@ -32,7 +32,7 @@ class LEIEntityType extends ContentEntityType implements LEIEntityTypeInterface
       'storage' => "Drupal\lei_entity\EntityStorage",
       'view_builder' => "Drupal\Core\Entity\EntityViewBuilder",
       'list_builder' => "Drupal\lei_entity\EntityListBuilder",
-      'views_data' => "Drupal\lei_entity\Entity\EntityViewsData",
+      'views_data' => "Drupal\lei_entity\EntityViewsData",
       'translation' => "Drupal\lei_entity\EntityTranslationHandler",
       'form' => [
         'default' => "Drupal\lei_entity\Form\EntityForm",
