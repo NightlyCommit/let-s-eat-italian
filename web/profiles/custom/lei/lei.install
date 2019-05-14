@@ -1,9 +1,11 @@
 <?php
 
+use Drupal\lei_core\ThemeHandler;
+
 function lei_install() {
-  /** @var \Drupal\lei_core\ThemeHandler $themeHandler */
+  /** @var ThemeHandler $themeHandler */
   $themeHandler = Drupal::service('lei_core.theme_handler');
 
-//  $themeHandler->setDefault('lei_theme');
+  $themeHandler->setDefault('lei_theme');
   $themeHandler->setAdmin('adminimal_theme');
 }
